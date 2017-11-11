@@ -1,5 +1,7 @@
 package com.example.william.shopplist.server;
 
+import com.example.william.shopplist.model.Category;
+import com.example.william.shopplist.model.MetaItem;
 import com.example.william.shopplist.model.ShoppingList;
 
 import java.util.List;
@@ -20,6 +22,14 @@ public interface ServerInterface {
     @Headers("userId: 1")
     @GET("lists/")
     public Call<List<ShoppingList>> getAllShoppingLists();
+
+    @Headers("userId: 1")
+    @GET("meta-item/")
+    public Call<List<MetaItem>> getAllMetaItems();
+
+    @Headers("userId: 1")
+    @GET("category/")
+    public Call<List<Category>> getAllCategories();
 /*
 
     @POST("cliente/")

@@ -3,7 +3,6 @@ package com.example.william.shopplist;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.View;
 
@@ -22,24 +21,19 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
+import com.example.william.shopplist.model.Category;
+import com.example.william.shopplist.model.MetaItem;
 import com.example.william.shopplist.model.ShoppingList;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.william.shopplist.model.ShoppingList;
 import com.example.william.shopplist.server.ServerConnection;
 import com.example.william.shopplist.server.ServerInterface;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
     /**
@@ -57,9 +51,15 @@ public class MainActivity extends AppCompatActivity {
      */
     private ViewPager mViewPager;
 
-    static SwipeRefreshLayout mySwipeRefreshLayout;
+    static SwipeRefreshLayout listsSwipeRefresh;
+    static SwipeRefreshLayout metaItemsSwipeRefresh;
+    static SwipeRefreshLayout categorieswipeRefresh;
     static ArrayAdapter<ShoppingList> listsAdapter;
+    static ArrayAdapter<Category> categoriesAdapter;
+    static ArrayAdapter<MetaItem> metaItemAdapter;
     static ListView lists;
+    static ListView metaItems;
+    static ListView categories;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,11 +90,11 @@ public class MainActivity extends AppCompatActivity {
         });
 
         listsAdapter = new ArrayAdapter<ShoppingList>(this, android.R.layout.simple_list_item_1,new ArrayList<ShoppingList>());
-
-        updateList();
+        metaItemAdapter = new ArrayAdapter<MetaItem>(this, android.R.layout.simple_list_item_1,new ArrayList<MetaItem>());
+        categoriesAdapter = new ArrayAdapter<Category>(this, android.R.layout.simple_list_item_1,new ArrayList<Category>());
     }
 
-    public static void updateList(){
+    public static void updateLists(){
         Call<List<ShoppingList>> retorno = servidor.getAllShoppingLists();
 
         Log.i("DSI2017","Chamando servidor");
@@ -102,29 +102,77 @@ public class MainActivity extends AppCompatActivity {
         retorno.enqueue(new Callback<List<ShoppingList>>() {
             @Override
             public void onResponse(Call<List<ShoppingList>> call, Response<List<ShoppingList>> response) {
-                Log.i("DSI2017",response.message());
                 List<ShoppingList> listData = response.body();
-                for(ShoppingList list:listData) {
-                   Log.i("DSI2017", list.getDescription());
-                }
+
                 if(listData != null) {
-                    Log.i("DSI2017", "Tem coisa");
                     listsAdapter.clear();
                     listsAdapter.addAll(listData);
-                    mySwipeRefreshLayout.setRefreshing(false);
+                    listsSwipeRefresh.setRefreshing(false);
                 }
             }
 
             @Override
             public void onFailure(Call<List<ShoppingList>> call, Throwable t) {
                 Log.i("DSI2017", "Não deu");
-                mySwipeRefreshLayout.setRefreshing(false);
+                listsSwipeRefresh.setRefreshing(false);
             }
         });
 
     }
 
 
+    public static void updateItems(){
+        Call<List<MetaItem>> retorno = servidor.getAllMetaItems();
+
+        Log.i("DSI2017","Chamando servidor");
+
+        retorno.enqueue(new Callback<List<MetaItem>>() {
+            @Override
+            public void onResponse(Call<List<MetaItem>> call, Response<List<MetaItem>> response) {
+                List<MetaItem> listData = response.body();
+
+                if(listData != null) {
+                    metaItemAdapter.clear();
+                    metaItemAdapter.addAll(listData);
+                    metaItemsSwipeRefresh.setRefreshing(false);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<MetaItem>> call, Throwable t) {
+                Log.i("DSI2017", "Não deu");
+                metaItemsSwipeRefresh.setRefreshing(false);
+            }
+        });
+
+    }
+
+
+    public static void updateCategories(){
+        Call<List<Category>> retorno = servidor.getAllCategories();
+
+        Log.i("DSI2017","Chamando servidor");
+
+        retorno.enqueue(new Callback<List<Category>>() {
+            @Override
+            public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
+                List<Category> listData = response.body();
+
+                if(listData != null) {
+                    categoriesAdapter.clear();
+                    categoriesAdapter.addAll(listData);
+                    categorieswipeRefresh.setRefreshing(false);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Category>> call, Throwable t) {
+                Log.i("DSI2017", "Não deu");
+                listsSwipeRefresh.setRefreshing(false);
+            }
+        });
+
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -147,50 +195,77 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
-        public PlaceholderFragment() {
-        }
-
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
+    public static class ListsFragment extends Fragment {
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-
-                Log.i("DSI2017", Integer.toString(getArguments().getInt(ARG_SECTION_NUMBER)));
+            View rootView = inflater.inflate(R.layout.fragment_lists, container, false);
 
             lists = (ListView) rootView.findViewById(R.id.lists);
-            mySwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swiperefresh);
+            listsSwipeRefresh = (SwipeRefreshLayout) rootView.findViewById(R.id.swiperefresh_lists);
             lists.setAdapter(listsAdapter);
 
-            mySwipeRefreshLayout.setOnRefreshListener(
+            listsSwipeRefresh.setOnRefreshListener(
                     new SwipeRefreshLayout.OnRefreshListener() {
                         @Override
                         public void onRefresh() {
-                            mySwipeRefreshLayout.setRefreshing(true);
-                            updateList();
+                            listsSwipeRefresh.setRefreshing(true);
+                            updateLists();
                         }
                     }
             );
+
+            updateLists();
+            return rootView;
+        }
+    }
+
+    public static class MetaItemsFragment extends Fragment {
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.fragment_metaitems, container, false);
+
+            metaItems = (ListView) rootView.findViewById(R.id.metaitems);
+            metaItemsSwipeRefresh = (SwipeRefreshLayout) rootView.findViewById(R.id.swiperefresh_metaitems);
+            metaItems.setAdapter(metaItemAdapter);
+
+            metaItemsSwipeRefresh.setOnRefreshListener(
+                    new SwipeRefreshLayout.OnRefreshListener() {
+                        @Override
+                        public void onRefresh() {
+                            metaItemsSwipeRefresh.setRefreshing(false);
+                        }
+                    }
+            );
+            updateItems();
+            return rootView;
+        }
+    }
+
+    public static class CategoriesFragment extends Fragment {
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.fragment_categories, container, false);
+
+            categories = (ListView) rootView.findViewById(R.id.categories);
+            categorieswipeRefresh = (SwipeRefreshLayout) rootView.findViewById(R.id.swiperefresh_categories);
+            categories.setAdapter(categoriesAdapter);
+
+            categorieswipeRefresh.setOnRefreshListener(
+                    new SwipeRefreshLayout.OnRefreshListener() {
+                        @Override
+                        public void onRefresh() {
+                            categorieswipeRefresh.setRefreshing(false);
+                        }
+                    }
+            );
+
+            updateCategories();
             return rootView;
         }
     }
@@ -207,9 +282,18 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position);
+            Log.i("DSI2017", Integer.toString(position));
+            switch (position) {
+                case 1:
+                    Fragment metaItems = new MetaItemsFragment();
+                    return metaItems;
+                case 2:
+                    Fragment categories = new CategoriesFragment();
+                    return categories;
+                default:
+                    Fragment lists = new ListsFragment();
+                    return lists;
+            }
         }
 
         @Override
