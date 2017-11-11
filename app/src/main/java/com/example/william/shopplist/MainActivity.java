@@ -3,6 +3,7 @@ package com.example.william.shopplist;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.View;
 
@@ -19,6 +20,8 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.william.shopplist.model.ShoppingList;
@@ -48,13 +51,16 @@ public class MainActivity extends AppCompatActivity {
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
-    private ServerInterface servidor;
+    static ServerInterface servidor;
     /**
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
 
-    private SwipeRefreshLayout mySwipeRefreshLayout;
+    static SwipeRefreshLayout mySwipeRefreshLayout;
+    static ArrayAdapter<ShoppingList> listsAdapter;
+    static ListView lists;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,23 +88,13 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-/*
-        mySwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
 
-        mySwipeRefreshLayout.setOnRefreshListener(
-                new SwipeRefreshLayout.OnRefreshListener() {
-                    @Override
-                    public void onRefresh() {
-                        mySwipeRefreshLayout.setRefreshing(true);
-                        mySwipeRefreshLayout.setRefreshing(false);
+        listsAdapter = new ArrayAdapter<ShoppingList>(this, android.R.layout.simple_list_item_1,new ArrayList<ShoppingList>());
 
-                    }
-                }
-        );*/
         updateList();
     }
 
-    public void updateList(){
+    public static void updateList(){
         Call<List<ShoppingList>> retorno = servidor.getAllShoppingLists();
 
         Log.i("DSI2017","Chamando servidor");
@@ -111,11 +107,18 @@ public class MainActivity extends AppCompatActivity {
                 for(ShoppingList list:listData) {
                    Log.i("DSI2017", list.getDescription());
                 }
+                if(listData != null) {
+                    Log.i("DSI2017", "Tem coisa");
+                    listsAdapter.clear();
+                    listsAdapter.addAll(listData);
+                    mySwipeRefreshLayout.setRefreshing(false);
+                }
             }
 
             @Override
             public void onFailure(Call<List<ShoppingList>> call, Throwable t) {
                 Log.i("DSI2017", "Não deu");
+                mySwipeRefreshLayout.setRefreshing(false);
             }
         });
 
@@ -172,6 +175,22 @@ public class MainActivity extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+
+                Log.i("DSI2017", Integer.toString(getArguments().getInt(ARG_SECTION_NUMBER)));
+
+            lists = (ListView) rootView.findViewById(R.id.lists);
+            mySwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swiperefresh);
+            lists.setAdapter(listsAdapter);
+
+            mySwipeRefreshLayout.setOnRefreshListener(
+                    new SwipeRefreshLayout.OnRefreshListener() {
+                        @Override
+                        public void onRefresh() {
+                            mySwipeRefreshLayout.setRefreshing(true);
+                            updateList();
+                        }
+                    }
+            );
             return rootView;
         }
     }
@@ -190,7 +209,7 @@ public class MainActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
+            return PlaceholderFragment.newInstance(position);
         }
 
         @Override

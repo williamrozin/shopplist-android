@@ -15,4 +15,8 @@ public class ShoppingList implements Serializable{
     public String getDescription() {
         return this.description;
     }
+
+    public String toString(){
+        return String.format("%s",this.description);
+    }
 }
