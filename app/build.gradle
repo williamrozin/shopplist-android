@@ -28,4 +28,5 @@ dependencies {
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
     compile 'com.squareup.retrofit2:converter-gson:2.3.0'
     compile 'com.android.support:multidex:1.0.0'
+    compile 'com.wdullaer:materialdatetimepicker:2.4.0'
 }
