@@ -1,5 +1,6 @@
 package com.example.william.shopplist;
 
+import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -60,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
     static ListView lists;
     static ListView metaItems;
     static ListView categories;
+    public int tab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,8 +86,17 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Log.i("DSI2017", Integer.toString(mViewPager.getCurrentItem()));
+                //view.getWindowVisibility();
+                switch (mViewPager.getCurrentItem()){
+                    case 1:
+                        return;
+                    case 2:
+                        return;
+                    default:
+                        startActivity(new Intent(MainActivity.this, AddListActivity.class));
+                        break;
+                }
             }
         });
 
@@ -282,18 +293,19 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            Log.i("DSI2017", Integer.toString(position));
+            Fragment fm;
             switch (position) {
                 case 1:
-                    Fragment metaItems = new MetaItemsFragment();
-                    return metaItems;
+                    fm = new MetaItemsFragment();
+                    break;
                 case 2:
-                    Fragment categories = new CategoriesFragment();
-                    return categories;
+                    fm = new CategoriesFragment();
+                    break;
                 default:
-                    Fragment lists = new ListsFragment();
-                    return lists;
+                    fm = new ListsFragment();
+                    break;
             }
+            return fm;
         }
 
         @Override
