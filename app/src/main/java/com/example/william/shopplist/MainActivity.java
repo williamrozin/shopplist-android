@@ -9,7 +9,6 @@ import android.view.View;
 
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 
 import android.support.v4.app.Fragment;
@@ -27,16 +26,18 @@ import com.example.william.shopplist.model.Category;
 import com.example.william.shopplist.model.MetaItem;
 import com.example.william.shopplist.model.ShoppingList;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.william.shopplist.model.User;
 import com.example.william.shopplist.server.ServerConnection;
 import com.example.william.shopplist.server.ServerInterface;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements Serializable{
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -55,21 +56,29 @@ public class MainActivity extends AppCompatActivity {
     static SwipeRefreshLayout listsSwipeRefresh;
     static SwipeRefreshLayout metaItemsSwipeRefresh;
     static SwipeRefreshLayout categorieswipeRefresh;
-    static ArrayAdapter<ShoppingList> listsAdapter;
+    static ListsAdapter listsAdapter;
     static ArrayAdapter<Category> categoriesAdapter;
     static ArrayAdapter<MetaItem> metaItemAdapter;
     static ListView lists;
     static ListView metaItems;
     static ListView categories;
+    static User user;
     public int tab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        Intent i = getIntent();
+        user = (User) i.getSerializableExtra("user");
         servidor = ServerConnection.getInstance().getServidor();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        if (user.getName() != null) {
+            toolbar.setTitle("Olá, " + user.getName() + "!");
+        }
+
+
         setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -94,19 +103,21 @@ public class MainActivity extends AppCompatActivity {
                     case 2:
                         return;
                     default:
-                        startActivity(new Intent(MainActivity.this, AddListActivity.class));
+                        Intent addItem = new Intent(MainActivity.this, AddListActivity.class);
+                        addItem.putExtra("user", user);
+                        startActivity(addItem);
                         break;
                 }
             }
         });
 
-        listsAdapter = new ArrayAdapter<ShoppingList>(this, android.R.layout.simple_list_item_1,new ArrayList<ShoppingList>());
+        listsAdapter = new ListsAdapter(this, R.layout.lists_adapter, new ArrayList<ShoppingList>());
         metaItemAdapter = new ArrayAdapter<MetaItem>(this, android.R.layout.simple_list_item_1,new ArrayList<MetaItem>());
         categoriesAdapter = new ArrayAdapter<Category>(this, android.R.layout.simple_list_item_1,new ArrayList<Category>());
     }
 
     public static void updateLists(){
-        Call<List<ShoppingList>> retorno = servidor.getAllShoppingLists();
+        Call<List<ShoppingList>> retorno = servidor.getAllShoppingLists(user.getId());
 
         Log.i("DSI2017","Chamando servidor");
 
@@ -133,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public static void updateItems(){
-        Call<List<MetaItem>> retorno = servidor.getAllMetaItems();
+        Call<List<MetaItem>> retorno = servidor.getAllMetaItems(user.getId());
 
         Log.i("DSI2017","Chamando servidor");
 
@@ -160,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public static void updateCategories(){
-        Call<List<Category>> retorno = servidor.getAllCategories();
+        Call<List<Category>> retorno = servidor.getAllCategories(user.getId());
 
         Log.i("DSI2017","Chamando servidor");
 
@@ -201,6 +212,9 @@ public class MainActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        } else if(id == R.id.logout) {
+            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            finish();
         }
 
         return super.onOptionsItemSelected(item);
@@ -211,12 +225,11 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_lists, container, false);
-
+            View rootView = inflater.inflate(R.layout.lists, container, false);
             lists = (ListView) rootView.findViewById(R.id.lists);
             listsSwipeRefresh = (SwipeRefreshLayout) rootView.findViewById(R.id.swiperefresh_lists);
             lists.setAdapter(listsAdapter);
-
+            Log.i("DSI2017", "AAAAAAAAAAAAAA");
             listsSwipeRefresh.setOnRefreshListener(
                     new SwipeRefreshLayout.OnRefreshListener() {
                         @Override
@@ -237,7 +250,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_metaitems, container, false);
+            View rootView = inflater.inflate(R.layout.metaitems, container, false);
 
             metaItems = (ListView) rootView.findViewById(R.id.metaitems);
             metaItemsSwipeRefresh = (SwipeRefreshLayout) rootView.findViewById(R.id.swiperefresh_metaitems);
@@ -261,7 +274,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_categories, container, false);
+            View rootView = inflater.inflate(R.layout.categories, container, false);
 
             categories = (ListView) rootView.findViewById(R.id.categories);
             categorieswipeRefresh = (SwipeRefreshLayout) rootView.findViewById(R.id.swiperefresh_categories);

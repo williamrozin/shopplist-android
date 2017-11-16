@@ -1,6 +1,7 @@
 package com.example.william.shopplist.model;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -14,6 +15,14 @@ public class ShoppingList implements Serializable{
 
     public String getDescription() {
         return this.description;
+    }
+
+    public String getDate() {
+        return new SimpleDateFormat("dd/MM/yyyy").format(new Date());
+    }
+
+    public List<ListItem> getItems() {
+        return this.items;
     }
 
     public String toString(){

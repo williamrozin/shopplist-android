@@ -1,5 +1,6 @@
 package com.example.william.shopplist;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -8,7 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.example.william.shopplist.model.MetaItem;
-import com.example.william.shopplist.model.ShoppingList;
+import com.example.william.shopplist.model.User;
 import com.example.william.shopplist.server.ServerConnection;
 import com.example.william.shopplist.server.ServerInterface;
 
@@ -26,19 +27,22 @@ public class AddListActivity extends AppCompatActivity {
     static ArrayAdapter metaItemAdapter;
     static ServerInterface servidor;
     static ListView metaItems;
+    static User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Intent i = getIntent();
+        user = (User) i.getSerializableExtra("user");
 
         servidor = ServerConnection.getInstance().getServidor();
 
         metaItemAdapter = new ArrayAdapter<MetaItem>(this, android.R.layout.simple_list_item_1,new ArrayList<MetaItem>());
-        setContentView(R.layout.addlist_activity);
+        setContentView(R.layout.add_list);
 
         metaItems = (ListView) findViewById(R.id.addlist_metaitems);
 
-        Toolbar mActionBarToolbar = (Toolbar) findViewById(R.id.addlist_toolbar);
+        Toolbar mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mActionBarToolbar);
         getSupportActionBar().setTitle("Adicionar lista");
 
@@ -49,7 +53,7 @@ public class AddListActivity extends AppCompatActivity {
     }
 
     public static void fillMetaItemList(){
-        Call<List<MetaItem>> retorno = servidor.getAllMetaItems();
+        Call<List<MetaItem>> retorno = servidor.getAllMetaItems(user.getId());
 
         Log.i("DSI2017","Chamando servidor");
 

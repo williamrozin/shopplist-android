@@ -6,4 +6,16 @@ public class User implements Serializable{
 	private String email;
 	private String name;
 	private String password;
+
+	public String getEmail() {
+		return this.email;
+	}
+
+	public String getName() {
+		return this.name;
+	}
+
+	public long getId() {
+		return this.id;
+	}
 }

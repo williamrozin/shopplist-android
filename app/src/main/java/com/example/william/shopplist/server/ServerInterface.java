@@ -3,6 +3,8 @@ package com.example.william.shopplist.server;
 import com.example.william.shopplist.model.Category;
 import com.example.william.shopplist.model.MetaItem;
 import com.example.william.shopplist.model.ShoppingList;
+import com.example.william.shopplist.model.User;
+import com.example.william.shopplist.model.Login;
 
 import java.util.List;
 
@@ -10,6 +12,7 @@ import retrofit2.Call;
 
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 
@@ -19,17 +22,18 @@ import retrofit2.http.POST;
 
 public interface ServerInterface {
 
-    @Headers("userId: 1")
     @GET("lists/")
-    public Call<List<ShoppingList>> getAllShoppingLists();
+    public Call<List<ShoppingList>> getAllShoppingLists(@Header("userId") long userId);
 
-    @Headers("userId: 1")
     @GET("meta-item/")
-    public Call<List<MetaItem>> getAllMetaItems();
+    public Call<List<MetaItem>> getAllMetaItems(@Header("userId") long userId);
 
-    @Headers("userId: 1")
     @GET("category/")
-    public Call<List<Category>> getAllCategories();
+    public Call<List<Category>> getAllCategories(@Header("userId") long userId);
+
+    @Headers("Content-type: application/json")
+    @POST("user/login")
+    public Call<User> login(@Body Login login);
 /*
 
     @POST("cliente/")
