@@ -18,8 +18,6 @@ import com.example.william.shopplist.model.Login;
 import com.example.william.shopplist.server.ServerConnection;
 import com.example.william.shopplist.server.ServerInterface;
 
-import org.w3c.dom.Text;
-
 import java.util.List;
 
 import retrofit2.Call;
@@ -31,62 +29,57 @@ import retrofit2.http.Headers;
 /**
  * Created by william on 16/11/17.
  */
-public class LoginActivity extends AppCompatActivity {
+public class SignupActivity extends AppCompatActivity {
     static ServerInterface servidor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login);
+        setContentView(R.layout.signup);
 
-        Window window = LoginActivity.this.getWindow();
+        Window window = SignupActivity.this.getWindow();
         window.setStatusBarColor(Color.parseColor("#283593"));
 
-        AppCompatButton button = (AppCompatButton) findViewById(R.id.btn_login);
+        TextView login = (TextView) findViewById(R.id.link_login);
 
-        TextView signup = (TextView) findViewById(R.id.link_signup);
-
-        signup.setOnClickListener(new View.OnClickListener() {
+        login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(LoginActivity.this, SignupActivity.class);
-                startActivity(i);
+                onBackPressed();
             }
         });
+
+
+        AppCompatButton button = (AppCompatButton) findViewById(R.id.btn_signup);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                EditText name = (EditText) findViewById(R.id.input_name);
                 EditText email = (EditText) findViewById(R.id.input_email);
                 EditText password = (EditText) findViewById(R.id.input_password);
-                Login login = new Login();
-                login.setEmail(email.getText().toString());
-                login.setPassword(password.getText().toString());
+                User user = new User();
+                user.setEmail(email.getText().toString());
+                user.setPassword(password.getText().toString());
+                user.setName(email.getText().toString());
 
                 servidor = ServerConnection.getInstance().getServidor();
 
-                Call<User> retorno = servidor.login(login);
+                Call<User> retorno = servidor.signup(user);
 
 
-                retorno.enqueue(new Callback<User>() {
+                retorno.enqueue(new Callback() {
                     @Override
-                    public void onResponse(Call<User> call, Response<User> response) {
-
-                        if (response.body() != null) {
-                            User loggedUser = response.body();
-                            Intent logged = new Intent(LoginActivity.this, MainActivity.class);
-                            logged.putExtra("user", loggedUser);
-                            startActivity(logged);
-                            finish();
-                        } else {
-                            Toast.makeText(LoginActivity.this, "Email ou senha incorretos",
-                                    Toast.LENGTH_LONG).show();
-                        }
+                    public void onResponse(Call call, Response response) {
+                        Intent i = new Intent(SignupActivity.this, LoginActivity.class);
+                        startActivity(i);
+                        finish();
                     }
 
                     @Override
-                    public void onFailure(Call<User> call, Throwable t) {
-                        Log.i("DSI2017", "Não deu");
+                    public void onFailure(Call call, Throwable t) {
+                        Toast.makeText(SignupActivity.this, "Não foi possivel criar a sua conta. Por favor, tente novamente.",
+                                Toast.LENGTH_LONG).show();
                     }
                 });
             }

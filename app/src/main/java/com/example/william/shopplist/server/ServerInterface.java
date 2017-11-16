@@ -34,6 +34,10 @@ public interface ServerInterface {
     @Headers("Content-type: application/json")
     @POST("user/login")
     public Call<User> login(@Body Login login);
+
+    @Headers("Content-type: application/json")
+    @POST("user/signup")
+    public Call<User> signup(@Body User user);
 /*
 
     @POST("cliente/")
