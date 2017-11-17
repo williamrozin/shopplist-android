@@ -1,4 +1,4 @@
-package com.example.william.shopplist;
+package com.example.william.shopplist.adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import com.example.william.shopplist.R;
 import com.example.william.shopplist.model.MetaItem;
 import com.example.william.shopplist.model.MetaItemList;
 import com.example.william.shopplist.model.ShoppingList;

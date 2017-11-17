@@ -2,6 +2,7 @@ package com.example.william.shopplist.model;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -11,7 +12,7 @@ public class ShoppingList implements Serializable{
 	private boolean completed;
 	private long userId;
 	private Date date;
-	private List<ListItem> items;
+	private List<ListItem> items = new ArrayList<>();
 
     public String getDescription() {
         return this.description;

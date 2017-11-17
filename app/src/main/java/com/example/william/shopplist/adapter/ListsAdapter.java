@@ -1,15 +1,16 @@
-package com.example.william.shopplist;
+package com.example.william.shopplist.adapter;
 
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.example.william.shopplist.R;
+import com.example.william.shopplist.SelectedListActivity;
 import com.example.william.shopplist.model.ShoppingList;
 
 import java.io.Serializable;
@@ -61,7 +62,7 @@ public class ListsAdapter extends ArrayAdapter<ShoppingList> implements Serializ
         v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent openItem = new Intent(view.getContext(), SelectedList.class);
+                Intent openItem = new Intent(view.getContext(), SelectedListActivity.class);
                 openItem.putExtra("list", shopplist);
                 view.getContext().startActivity(openItem);
             }

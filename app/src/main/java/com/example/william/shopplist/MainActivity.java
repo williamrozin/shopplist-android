@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.example.william.shopplist.adapter.ListsAdapter;
 import com.example.william.shopplist.model.Category;
 import com.example.william.shopplist.model.MetaItem;
 import com.example.william.shopplist.model.ShoppingList;

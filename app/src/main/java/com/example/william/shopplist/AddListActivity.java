@@ -7,12 +7,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.william.shopplist.adapter.MetaItemAdapter;
 import com.example.william.shopplist.model.ListItem;
 import com.example.william.shopplist.model.MetaItem;
 import com.example.william.shopplist.model.MetaItemList;
@@ -72,7 +71,9 @@ public class AddListActivity extends AppCompatActivity {
                     if (metaItemAdapter.getItem(i).isChecked()) {
                         ListItem listItem = new ListItem();
                         listItem.setMetaItem(metaItemAdapter.getItem(i).getMetaItem());
-                        sl.addListItem(listItem);
+                        if (metaItemAdapter.getItem(i).getMetaItem() != null) {
+                            sl.addListItem(listItem);
+                        }
                     }
                 }
 

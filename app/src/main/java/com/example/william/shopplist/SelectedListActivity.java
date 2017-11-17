@@ -19,7 +19,7 @@ import java.util.ArrayList;
 /**
  * Created by william on 11/11/17.
  */
-public class SelectedList extends AppCompatActivity implements Serializable{
+public class SelectedListActivity extends AppCompatActivity implements Serializable{
     static ArrayAdapter<ListItem> adapter;
     static ServerInterface servidor;
     static ListView listItems;
