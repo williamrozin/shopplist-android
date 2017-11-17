@@ -47,6 +47,10 @@ public class MetaItemAdapter extends ArrayAdapter<MetaItemList> implements Seria
 
         if (metaItemList != null) {
             CheckBox cb = (CheckBox) v.findViewById(R.id.check_item);
+            TextView tv = (TextView) v.findViewById(R.id.category);
+
+            tv.setText(metaItemList.getMetaItem().getCategory().getDescription());
+            tv.setTextColor(Color.parseColor(metaItemList.getMetaItem().getCategory().getColor()));
 
             if (cb!= null) {
                 cb.setText(metaItemList.getMetaItem().getDescription());

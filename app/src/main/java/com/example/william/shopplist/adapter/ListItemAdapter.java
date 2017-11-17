@@ -61,7 +61,7 @@ public class ListItemAdapter extends ArrayAdapter<ListItem> implements Serializa
 
         if (listItem != null) {
             CheckBox cb = (CheckBox) v.findViewById(R.id.check_item);
-
+            cb.setTextColor(Color.parseColor(listItem.getMetaItem().getCategory().getColor()));
             if (cb!= null) {
                 MetaItem metaItem = listItem.getMetaItem();
                 cb.setText(metaItem.getDescription());
