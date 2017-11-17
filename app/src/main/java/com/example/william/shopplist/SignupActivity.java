@@ -61,25 +61,27 @@ public class SignupActivity extends AppCompatActivity {
                 User user = new User();
                 user.setEmail(email.getText().toString());
                 user.setPassword(password.getText().toString());
-                user.setName(email.getText().toString());
+                user.setName(name.getText().toString());
 
                 servidor = ServerConnection.getInstance().getServidor();
 
                 Call<User> retorno = servidor.signup(user);
 
-
-                retorno.enqueue(new Callback() {
+                retorno.enqueue(new Callback<User>() {
                     @Override
-                    public void onResponse(Call call, Response response) {
-                        Intent i = new Intent(SignupActivity.this, LoginActivity.class);
-                        startActivity(i);
-                        finish();
+                    public void onResponse(Call<User> call, Response<User> response) {
+                        if (response.body() != null) {
+                            User loggedUser = response.body();
+                            Intent logged = new Intent(SignupActivity.this, MainActivity.class);
+                            logged.putExtra("user", loggedUser);
+                            startActivity(logged);
+                            finish();
+                        }
                     }
 
                     @Override
-                    public void onFailure(Call call, Throwable t) {
-                        Toast.makeText(SignupActivity.this, "Não foi possivel criar a sua conta. Por favor, tente novamente.",
-                                Toast.LENGTH_LONG).show();
+                    public void onFailure(Call<User> call, Throwable t) {
+                        Log.i("DSI2017", "deu erro meu chapa");
                     }
                 });
             }
