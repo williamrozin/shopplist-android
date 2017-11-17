@@ -29,32 +29,17 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/abc_action_bar_content_inset_with_nav"
-        android:padding="@dimen/abc_action_bar_content_inset_material">
+        android:layout_marginTop="@dimen/abc_action_bar_content_inset_with_nav">
 
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="Itens"
-                android:id="@+id/textView"
-                android:layout_marginLeft="24dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginRight="24dp" />
-
             <ListView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/list"
-                android:layout_marginLeft="24dp"
-                android:layout_marginRight="24dp"
-                android:layout_marginBottom="12dp"
-                android:layout_marginTop="6dp">
+                android:id="@+id/list">
             </ListView>
         </LinearLayout>
 

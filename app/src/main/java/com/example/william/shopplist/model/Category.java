@@ -13,4 +13,8 @@ public class Category implements Serializable{
 	public String toString(){
 		return String.format("%s",this.description);
 	}
+
+	public String getColor() {
+		return this.color;
+	}
 }

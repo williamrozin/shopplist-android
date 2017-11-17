@@ -41,10 +41,6 @@ public class MetaItemAdapter extends ArrayAdapter<MetaItemList> implements Seria
             LayoutInflater vi;
             vi = LayoutInflater.from(getContext());
             v = vi.inflate(R.layout.check_adapter, null);
-
-            if (position % 2 == 0) {
-                v.setBackgroundColor(Color.parseColor("#F5F5F5"));
-            }
         }
 
         metaItemList = getItem(position);

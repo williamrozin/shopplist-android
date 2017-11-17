@@ -77,7 +77,12 @@ public class AddListActivity extends AppCompatActivity {
                     }
                 }
 
-                createShoppingList(sl);
+                if (description.getText().toString().compareTo("") != 0) {
+                    createShoppingList(sl);
+                } else {
+                    Toast.makeText(AddListActivity.this, "Informe um nome para esta lista",
+                            Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
@@ -120,8 +125,6 @@ public class AddListActivity extends AppCompatActivity {
             public void onResponse(Call<ShoppingList> call, Response<ShoppingList> response) {
 
                 if (response.body() != null) {
-                    ShoppingList responseList = response.body();
-                    Log.i("DSI2017", responseList.getDescription());
                     onBackPressed();
                     finish();
                 } else {

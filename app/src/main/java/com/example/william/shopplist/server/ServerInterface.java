@@ -15,6 +15,8 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
+import retrofit2.http.Path;
 
 /**
  * Created by walte on 18/10/2017.
@@ -42,6 +44,12 @@ public interface ServerInterface {
     @Headers("Content-type: application/json")
     @POST("lists")
     public Call<ShoppingList> createShoppingList(@Body ShoppingList shoppingList);
+
+    @PUT("item/{id}/check")
+    public Call<Void> checkItem(@Path("id") long id);
+
+    @PUT("item/{id}/uncheck")
+    public Call<Void> uncheckItem(@Path("id") long id);
 /*
 
     @POST("cliente/")

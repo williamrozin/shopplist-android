@@ -13,4 +13,8 @@ public class MetaItem implements Serializable {
 	public String toString(){
 		return String.format("%s",this.description);
 	}
+
+	public Category getCategory() {
+		return this.category;
+	}
 }

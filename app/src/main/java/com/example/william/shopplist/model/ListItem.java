@@ -21,4 +21,24 @@ public class ListItem implements Serializable{
 	public void setMetaItem(MetaItem metaItem) {
 		this.metaItem = metaItem;
 	}
+
+	public boolean isChecked() {
+		return this.checked;
+	}
+
+	public void setChecked() {
+		this.checked = true;
+	}
+
+	public void unsetChecked() {
+		this.checked = false;
+	}
+
+	public long getId(){
+		return this.id;
+	}
+
+	public MetaItem getMetaItem() {
+		return this.metaItem;
+	}
 }
