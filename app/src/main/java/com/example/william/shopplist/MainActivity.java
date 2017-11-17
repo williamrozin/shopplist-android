@@ -195,6 +195,7 @@ public class MainActivity extends AppCompatActivity implements Serializable{
         });
 
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -242,6 +243,22 @@ public class MainActivity extends AppCompatActivity implements Serializable{
 
             updateLists();
             return rootView;
+        }
+    }
+
+    @Override
+    public void onRestart() {
+        super.onRestart();
+        switch (mViewPager.getCurrentItem()){
+            case 1:
+                updateItems();
+                return;
+            case 2:
+                updateCategories();
+                return;
+            default:
+                updateLists();
+                break;
         }
     }
 

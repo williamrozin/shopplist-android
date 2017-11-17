@@ -2,13 +2,21 @@ package com.example.william.shopplist;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.william.shopplist.model.ListItem;
 import com.example.william.shopplist.model.MetaItem;
+import com.example.william.shopplist.model.MetaItemList;
+import com.example.william.shopplist.model.ShoppingList;
 import com.example.william.shopplist.model.User;
 import com.example.william.shopplist.server.ServerConnection;
 import com.example.william.shopplist.server.ServerInterface;
@@ -24,7 +32,7 @@ import retrofit2.Response;
  * Created by william on 11/11/17.
  */
 public class AddListActivity extends AppCompatActivity {
-    static ArrayAdapter metaItemAdapter;
+    static MetaItemAdapter metaItemAdapter;
     static ServerInterface servidor;
     static ListView metaItems;
     static User user;
@@ -37,7 +45,7 @@ public class AddListActivity extends AppCompatActivity {
 
         servidor = ServerConnection.getInstance().getServidor();
 
-        metaItemAdapter = new ArrayAdapter<MetaItem>(this, android.R.layout.simple_list_item_1,new ArrayList<MetaItem>());
+        metaItemAdapter = new MetaItemAdapter(this, R.layout.lists_adapter, new ArrayList<MetaItemList>());
         setContentView(R.layout.add_list);
 
         metaItems = (ListView) findViewById(R.id.addlist_metaitems);
@@ -50,6 +58,27 @@ public class AddListActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         fillMetaItemList();
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_createList);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EditText description = (EditText) findViewById(R.id.editText);
+
+                ShoppingList sl = new ShoppingList();
+                sl.setDescription(description.getText().toString());
+                sl.setUserId(user.getId());
+                for(int i=0; i < metaItemAdapter.getCount(); i++) {
+                    if (metaItemAdapter.getItem(i).isChecked()) {
+                        ListItem listItem = new ListItem();
+                        listItem.setMetaItem(metaItemAdapter.getItem(i).getMetaItem());
+                        sl.addListItem(listItem);
+                    }
+                }
+
+                createShoppingList(sl);
+            }
+        });
     }
 
     public static void fillMetaItemList(){
@@ -64,7 +93,12 @@ public class AddListActivity extends AppCompatActivity {
 
                 if(listData != null) {
                     metaItemAdapter.clear();
-                    metaItemAdapter.addAll(listData);
+                    for(int i=0; i < listData.size(); i++) {
+                        MetaItemList mi = new MetaItemList();
+                        mi.setMetaItem(listData.get(i));
+                        mi.unsetChecked();
+                        metaItemAdapter.add(mi);
+                    }
                 }
             }
 
@@ -74,6 +108,32 @@ public class AddListActivity extends AppCompatActivity {
             }
         });
         metaItems.setAdapter(metaItemAdapter);
+    }
+
+    public void createShoppingList(ShoppingList list) {
+        Call<ShoppingList> retorno = servidor.createShoppingList(list);
+
+
+        retorno.enqueue(new Callback<ShoppingList>() {
+            @Override
+            public void onResponse(Call<ShoppingList> call, Response<ShoppingList> response) {
+
+                if (response.body() != null) {
+                    ShoppingList responseList = response.body();
+                    Log.i("DSI2017", responseList.getDescription());
+                    onBackPressed();
+                    finish();
+                } else {
+                    Toast.makeText(AddListActivity.this, "Ocorreu um erro ao criar a lista",
+                            Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ShoppingList> call, Throwable t) {
+                Log.i("DSI2017", "Não deu");
+            }
+        });
     }
 
     @Override

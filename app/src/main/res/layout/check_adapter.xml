@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content" android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:id="@+id/check_adapter">
+
+    <TableRow android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:height="36dp"
+        android:minHeight="48dp"
+        android:paddingTop="6dp"
+        android:paddingLeft="6dp">
+
+        <CheckBox android:id="@+id/check_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"/>
+
+    </TableRow>
+
+</TableLayout>

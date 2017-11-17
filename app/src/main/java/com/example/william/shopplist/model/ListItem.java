@@ -17,4 +17,8 @@ public class ListItem implements Serializable{
 	public String toString() {
 		return this.getDescription();
 	}
+
+	public void setMetaItem(MetaItem metaItem) {
+		this.metaItem = metaItem;
+	}
 }

@@ -29,8 +29,7 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/abc_action_bar_content_inset_with_nav"
-        android:padding="@dimen/abc_action_bar_content_inset_material">
+        android:layout_marginTop="@dimen/abc_action_bar_content_inset_with_nav">
 
         <LinearLayout
             android:orientation="vertical"
@@ -101,7 +100,7 @@
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_addlist"
+        android:id="@+id/fab_createList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"

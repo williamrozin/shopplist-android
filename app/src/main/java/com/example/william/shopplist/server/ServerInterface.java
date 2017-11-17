@@ -38,6 +38,10 @@ public interface ServerInterface {
     @Headers("Content-type: application/json")
     @POST("user/signup")
     public Call<User> signup(@Body User user);
+
+    @Headers("Content-type: application/json")
+    @POST("lists")
+    public Call<ShoppingList> createShoppingList(@Body ShoppingList shoppingList);
 /*
 
     @POST("cliente/")

@@ -28,4 +28,16 @@ public class ShoppingList implements Serializable{
     public String toString(){
         return String.format("%s",this.description);
     }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void addListItem(ListItem listItem) {
+        this.items.add(listItem);
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
+    }
 }
