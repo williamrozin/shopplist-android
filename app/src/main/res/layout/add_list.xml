@@ -73,7 +73,7 @@
         <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Marcar todos os itens"
+            android:text="Selecionar todos os itens"
             android:textSize="14dp"
             android:textColor="#3F51B5"
             android:id="@+id/check_all"

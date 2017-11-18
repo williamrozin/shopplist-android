@@ -59,6 +59,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_menu_save"
-        android:tint="@color/abc_primary_text_disable_only_material_dark" />
+        android:src="@android:drawable/ic_menu_edit"
+        android:tint="@color/mdtp_white" />
 </android.support.design.widget.CoordinatorLayout>
