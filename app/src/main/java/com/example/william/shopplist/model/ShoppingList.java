@@ -41,4 +41,8 @@ public class ShoppingList implements Serializable{
     public void setUserId(long userId) {
         this.userId = userId;
     }
+
+    public long getId() {
+        return this.id;
+    }
 }

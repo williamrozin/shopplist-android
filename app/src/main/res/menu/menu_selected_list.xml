@@ -1,0 +1,15 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.william.shopplist.SelectedListActivity">
+    <item
+        android:id="@+id/share"
+        android:icon="@drawable/ic_share"
+        android:title="Compartilhe"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/delete"
+        android:icon="@drawable/ic_delete"
+        android:title="Excluir"
+        app:showAsAction="always"/>
+</menu>

@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.example.william.shopplist.R;
 import com.example.william.shopplist.SelectedListActivity;
+import com.example.william.shopplist.model.Category;
 import com.example.william.shopplist.model.ShoppingList;
 
 import java.io.Serializable;
@@ -19,20 +20,20 @@ import java.util.List;
 /**
  * Created by william on 15/11/17.
  */
-public class ListsAdapter extends ArrayAdapter<ShoppingList> implements Serializable {
+public class CategoriesAdapter extends ArrayAdapter<Category> implements Serializable {
 
-    public ListsAdapter(Context context, int textViewResourceId) {
+    public CategoriesAdapter(Context context, int textViewResourceId) {
         super(context, textViewResourceId);
     }
 
-    public ListsAdapter(Context context, int resource, List<ShoppingList> items) {
+    public CategoriesAdapter(Context context, int resource, List<Category> items) {
         super(context, resource, items);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View v = convertView;
-        final ShoppingList shopplist;
+        final Category category;
 
         if (v == null) {
             LayoutInflater vi;
@@ -40,27 +41,22 @@ public class ListsAdapter extends ArrayAdapter<ShoppingList> implements Serializ
             v = vi.inflate(R.layout.lists_adapter, null);
         }
 
-        shopplist = getItem(position);
+        category = getItem(position);
 
-        if (shopplist != null) {
-            TextView tt2 = (TextView) v.findViewById(R.id.date);
+        if (category != null) {
             TextView tt3 = (TextView) v.findViewById(R.id.description);
 
             if (tt3 != null) {
-                tt3.setText(shopplist.getDescription());
+                tt3.setText(category.getDescription());
             }
 
-            if (tt2 != null) {
-                tt2.setText(shopplist.getDate());
-            }
         }
 
         v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent openItem = new Intent(view.getContext(), SelectedListActivity.class);
-                openItem.putExtra("list", shopplist);
-                view.getContext().startActivity(openItem);
+                //Intent openItem = new Intent(view.getContext(), SelectedListActivity.class);
+                //view.getContext().startActivity(openItem);
             }
         });
         return v;

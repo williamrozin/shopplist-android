@@ -3,6 +3,7 @@ package com.example.william.shopplist.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,29 +52,36 @@ public class ListItemAdapter extends ArrayAdapter<ListItem> implements Serializa
             LayoutInflater vi;
             vi = LayoutInflater.from(getContext());
             v = vi.inflate(R.layout.check_adapter, null);
-
-            if (position % 2 == 0) {
-                v.setBackgroundColor(Color.parseColor("#f5f5f5"));
-            }
         }
 
         listItem = getItem(position);
 
         if (listItem != null) {
-            CheckBox cb = (CheckBox) v.findViewById(R.id.check_item);
-            cb.setTextColor(Color.parseColor(listItem.getMetaItem().getCategory().getColor()));
+            final CheckBox cb = (CheckBox) v.findViewById(R.id.check_item);
+            TextView tv = (TextView) v.findViewById(R.id.category);
+
+            tv.setText(listItem.getMetaItem().getCategory().getDescription());
+            tv.setTextColor(Color.parseColor(listItem.getMetaItem().getCategory().getColor()));
             if (cb!= null) {
                 MetaItem metaItem = listItem.getMetaItem();
                 cb.setText(metaItem.getDescription());
                 cb.setChecked(listItem.isChecked());
+                if (listItem.isChecked()) {
+                    cb.setPaintFlags(cb.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                } else {
+                    cb.setPaintFlags(cb.getPaintFlags() & ( ~ Paint.STRIKE_THRU_TEXT_FLAG));
+                }
+
                 cb.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         if (listItem.isChecked()) {
                             listItem.unsetChecked();
                             unsetAsChecked(listItem.getId());
+                            cb.setPaintFlags(cb.getPaintFlags() & ( ~ Paint.STRIKE_THRU_TEXT_FLAG));
                         } else {
                             listItem.setChecked();
+                            cb.setPaintFlags(cb.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                             setAsChecked(listItem.getId());
                         }
                     }

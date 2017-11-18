@@ -7,7 +7,9 @@
     <TableRow android:layout_height="wrap_content"
         android:layout_width="fill_parent"
         android:height="36dp"
-        android:minHeight="64dp">
+        android:minHeight="64dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp">
 
         <TextView android:layout_height="wrap_content"
             android:layout_width="fill_parent"
@@ -17,6 +19,7 @@
             android:paddingTop="20dp"
             android:paddingLeft="12dp"
             android:textSize="18dp"
+            android:textColor="#424242"
             android:linksClickable="true" />
 
         <TextView

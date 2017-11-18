@@ -3,6 +3,7 @@ package com.example.william.shopplist.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,8 @@ import android.widget.TextView;
 
 import com.example.william.shopplist.R;
 import com.example.william.shopplist.SelectedListActivity;
+import com.example.william.shopplist.model.Category;
+import com.example.william.shopplist.model.MetaItem;
 import com.example.william.shopplist.model.ShoppingList;
 
 import java.io.Serializable;
@@ -19,20 +22,19 @@ import java.util.List;
 /**
  * Created by william on 15/11/17.
  */
-public class ListsAdapter extends ArrayAdapter<ShoppingList> implements Serializable {
-
-    public ListsAdapter(Context context, int textViewResourceId) {
+public class MetaItemsAdapter extends ArrayAdapter<MetaItem> implements Serializable {
+    public MetaItemsAdapter(Context context, int textViewResourceId) {
         super(context, textViewResourceId);
     }
 
-    public ListsAdapter(Context context, int resource, List<ShoppingList> items) {
+    public MetaItemsAdapter(Context context, int resource, List<MetaItem> items) {
         super(context, resource, items);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View v = convertView;
-        final ShoppingList shopplist;
+        final MetaItem metaItem;
 
         if (v == null) {
             LayoutInflater vi;
@@ -40,27 +42,28 @@ public class ListsAdapter extends ArrayAdapter<ShoppingList> implements Serializ
             v = vi.inflate(R.layout.lists_adapter, null);
         }
 
-        shopplist = getItem(position);
+        metaItem = getItem(position);
 
-        if (shopplist != null) {
+        if (metaItem != null) {
             TextView tt2 = (TextView) v.findViewById(R.id.date);
             TextView tt3 = (TextView) v.findViewById(R.id.description);
 
-            if (tt3 != null) {
-                tt3.setText(shopplist.getDescription());
+            if (tt2 != null) {
+                tt2.setText(metaItem.getCategory().getDescription());
+                tt2.setTextColor(Color.parseColor(metaItem.getCategory().getColor()));
             }
 
-            if (tt2 != null) {
-                tt2.setText(shopplist.getDate());
+            if (tt3 != null) {
+                tt3.setText(metaItem.getDescription());
             }
+
         }
 
         v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent openItem = new Intent(view.getContext(), SelectedListActivity.class);
-                openItem.putExtra("list", shopplist);
-                view.getContext().startActivity(openItem);
+                //Intent openItem = new Intent(view.getContext(), SelectedListActivity.class);
+                //view.getContext().startActivity(openItem);
             }
         });
         return v;

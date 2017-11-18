@@ -11,6 +11,7 @@ import java.util.List;
 import retrofit2.Call;
 
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
@@ -50,6 +51,9 @@ public interface ServerInterface {
 
     @PUT("item/{id}/uncheck")
     public Call<Void> uncheckItem(@Path("id") long id);
+
+    @DELETE("lists/{id}")
+    public Call<Void> removeList(@Path("id") long id);
 /*
 
     @POST("cliente/")

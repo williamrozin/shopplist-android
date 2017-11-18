@@ -22,7 +22,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.example.william.shopplist.adapter.CategoriesAdapter;
 import com.example.william.shopplist.adapter.ListsAdapter;
+import com.example.william.shopplist.adapter.MetaItemsAdapter;
 import com.example.william.shopplist.model.Category;
 import com.example.william.shopplist.model.MetaItem;
 import com.example.william.shopplist.model.ShoppingList;
@@ -58,8 +60,8 @@ public class MainActivity extends AppCompatActivity implements Serializable{
     static SwipeRefreshLayout metaItemsSwipeRefresh;
     static SwipeRefreshLayout categorieswipeRefresh;
     static ListsAdapter listsAdapter;
-    static ArrayAdapter<Category> categoriesAdapter;
-    static ArrayAdapter<MetaItem> metaItemAdapter;
+    static CategoriesAdapter categoriesAdapter;
+    static MetaItemsAdapter metaItemAdapter;
     static ListView lists;
     static ListView metaItems;
     static ListView categories;
@@ -113,8 +115,8 @@ public class MainActivity extends AppCompatActivity implements Serializable{
         });
 
         listsAdapter = new ListsAdapter(this, R.layout.lists_adapter, new ArrayList<ShoppingList>());
-        metaItemAdapter = new ArrayAdapter<MetaItem>(this, android.R.layout.simple_list_item_1,new ArrayList<MetaItem>());
-        categoriesAdapter = new ArrayAdapter<Category>(this, android.R.layout.simple_list_item_1,new ArrayList<Category>());
+        metaItemAdapter = new MetaItemsAdapter(this, android.R.layout.simple_list_item_1,new ArrayList<MetaItem>());
+        categoriesAdapter = new CategoriesAdapter(this, android.R.layout.simple_list_item_1,new ArrayList<Category>());
     }
 
     public static void updateLists(){

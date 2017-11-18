@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -49,6 +50,15 @@ public class AddListActivity extends AppCompatActivity {
 
         metaItems = (ListView) findViewById(R.id.addlist_metaitems);
 
+        final CheckBox markAll = (CheckBox) findViewById(R.id.check_all);
+
+        markAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fillMetaItemList(markAll.isChecked());
+            }
+        });
+
         Toolbar mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mActionBarToolbar);
         getSupportActionBar().setTitle("Adicionar lista");
@@ -56,7 +66,7 @@ public class AddListActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        fillMetaItemList();
+        fillMetaItemList(markAll.isChecked());
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_createList);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -87,9 +97,9 @@ public class AddListActivity extends AppCompatActivity {
         });
     }
 
-    public static void fillMetaItemList(){
+    public static void fillMetaItemList(boolean check){
         Call<List<MetaItem>> retorno = servidor.getAllMetaItems(user.getId());
-
+        final boolean checkItems = check;
         Log.i("DSI2017","Chamando servidor");
 
         retorno.enqueue(new Callback<List<MetaItem>>() {
@@ -102,7 +112,11 @@ public class AddListActivity extends AppCompatActivity {
                     for(int i=0; i < listData.size(); i++) {
                         MetaItemList mi = new MetaItemList();
                         mi.setMetaItem(listData.get(i));
-                        mi.unsetChecked();
+                        if (checkItems) {
+                            mi.setChecked();
+                        } else {
+                            mi.unsetChecked();
+                        }
                         metaItemAdapter.add(mi);
                     }
                 }

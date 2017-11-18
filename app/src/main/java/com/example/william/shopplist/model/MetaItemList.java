@@ -23,7 +23,6 @@ public class MetaItemList {
         this.isChecked = true;
     }
 
-
     public void unsetChecked() {
         this.isChecked = false;
     }
