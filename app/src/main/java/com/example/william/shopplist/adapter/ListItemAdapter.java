@@ -33,7 +33,7 @@ import retrofit2.Response;
  * Created by william on 15/11/17.
  */
 public class ListItemAdapter extends ArrayAdapter<ListItem> implements Serializable {
-    static ServerInterface servidor;
+    static ServerInterface server;
     public ListItemAdapter(Context context, int textViewResourceId) {
         super(context, textViewResourceId);
     }
@@ -46,7 +46,7 @@ public class ListItemAdapter extends ArrayAdapter<ListItem> implements Serializa
     public View getView(int position, View convertView, ViewGroup parent) {
         View v = convertView;
         final ListItem listItem;
-        servidor = ServerConnection.getInstance().getServidor();
+        server = ServerConnection.getInstance().getServer();
 
         if (v == null) {
             LayoutInflater vi;
@@ -93,9 +93,9 @@ public class ListItemAdapter extends ArrayAdapter<ListItem> implements Serializa
     }
 
     public void setAsChecked(long id) {
-        Call<Void> retorno = servidor.checkItem(id);
+        Call<Void> request = server.checkItem(id);
 
-        retorno.enqueue(new Callback<Void>() {
+        request.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 Log.i("DSI2017", "item marcado");
@@ -109,9 +109,9 @@ public class ListItemAdapter extends ArrayAdapter<ListItem> implements Serializa
     }
 
     public void unsetAsChecked(long id) {
-        Call<Void> retorno = servidor.uncheckItem(id);
+        Call<Void> request = server.uncheckItem(id);
 
-        retorno.enqueue(new Callback<Void>() {
+        request.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 Log.i("DSI2017", "item desmarcado");

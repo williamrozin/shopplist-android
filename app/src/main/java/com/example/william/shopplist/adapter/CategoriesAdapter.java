@@ -45,6 +45,11 @@ public class CategoriesAdapter extends ArrayAdapter<Category> implements Seriali
 
         if (category != null) {
             TextView tt3 = (TextView) v.findViewById(R.id.description);
+            TextView tt2 = (TextView) v.findViewById(R.id.date);
+
+            if (tt2 != null) {
+                tt2.setText("Cód. " + Long.toString(category.getId()));
+            }
 
             if (tt3 != null) {
                 tt3.setText(category.getDescription());

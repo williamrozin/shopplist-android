@@ -17,4 +17,12 @@ public class MetaItem implements Serializable {
 	public Category getCategory() {
 		return this.category;
 	}
+
+	public long getId() {
+		return this.id;
+	}
+
+	public boolean equals(MetaItem metaItem) {
+		return this.getId() == metaItem.getId();
+	}
 }

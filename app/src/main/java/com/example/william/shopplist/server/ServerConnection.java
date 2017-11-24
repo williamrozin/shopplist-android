@@ -12,7 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ServerConnection {
     private static ServerConnection instance = null;
-    private ServerInterface servidor;
+    private ServerInterface server;
 
     public static ServerConnection getInstance(){
         if(instance == null){
@@ -27,14 +27,14 @@ public class ServerConnection {
                 .create();
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.25.3:8080/dsi2017web/api/")
+                .baseUrl("http://192.168.115.81:8080/dsi2017web/api/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        servidor = retrofit.create(ServerInterface.class);
+        server = retrofit.create(ServerInterface.class);
     }
 
-    public ServerInterface getServidor() {
-        return servidor;
+    public ServerInterface getServer() {
+        return server;
     }
 }

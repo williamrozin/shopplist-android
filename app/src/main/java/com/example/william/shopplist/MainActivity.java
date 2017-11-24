@@ -19,7 +19,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.example.william.shopplist.adapter.CategoriesAdapter;
@@ -41,24 +40,14 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements Serializable{
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
     private SectionsPagerAdapter mSectionsPagerAdapter;
-    static ServerInterface servidor;
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
+    private int tab;
     private ViewPager mViewPager;
 
+    static ServerInterface server;
     static SwipeRefreshLayout listsSwipeRefresh;
     static SwipeRefreshLayout metaItemsSwipeRefresh;
-    static SwipeRefreshLayout categorieswipeRefresh;
+    static SwipeRefreshLayout categoriesSwipeRefresh;
     static ListsAdapter listsAdapter;
     static CategoriesAdapter categoriesAdapter;
     static MetaItemsAdapter metaItemAdapter;
@@ -66,7 +55,6 @@ public class MainActivity extends AppCompatActivity implements Serializable{
     static ListView metaItems;
     static ListView categories;
     static User user;
-    public int tab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,20 +62,16 @@ public class MainActivity extends AppCompatActivity implements Serializable{
         setContentView(R.layout.activity_main);
         Intent i = getIntent();
         user = (User) i.getSerializableExtra("user");
-        servidor = ServerConnection.getInstance().getServidor();
+        server = ServerConnection.getInstance().getServer();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
         if (user.getName() != null) {
             toolbar.setTitle("Olá, " + user.getName() + "!");
         }
 
-
         setSupportActionBar(toolbar);
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
-        // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
@@ -98,8 +82,6 @@ public class MainActivity extends AppCompatActivity implements Serializable{
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i("DSI2017", Integer.toString(mViewPager.getCurrentItem()));
-                //view.getWindowVisibility();
                 switch (mViewPager.getCurrentItem()){
                     case 1:
                         return;
@@ -119,12 +101,26 @@ public class MainActivity extends AppCompatActivity implements Serializable{
         categoriesAdapter = new CategoriesAdapter(this, android.R.layout.simple_list_item_1,new ArrayList<Category>());
     }
 
+    @Override
+    public void onRestart() {
+        super.onRestart();
+        switch (mViewPager.getCurrentItem()){
+            case 1:
+                updateItems();
+                break;
+            case 2:
+                updateCategories();
+                break;
+            default:
+                updateLists();
+                break;
+        }
+    }
+
     public static void updateLists(){
-        Call<List<ShoppingList>> retorno = servidor.getAllShoppingLists(user.getId());
+        Call<List<ShoppingList>> request = server.getAllShoppingLists(user.getId());
 
-        Log.i("DSI2017","Chamando servidor");
-
-        retorno.enqueue(new Callback<List<ShoppingList>>() {
+        request.enqueue(new Callback<List<ShoppingList>>() {
             @Override
             public void onResponse(Call<List<ShoppingList>> call, Response<List<ShoppingList>> response) {
                 List<ShoppingList> listData = response.body();
@@ -138,7 +134,6 @@ public class MainActivity extends AppCompatActivity implements Serializable{
 
             @Override
             public void onFailure(Call<List<ShoppingList>> call, Throwable t) {
-                Log.i("DSI2017", "Não deu");
                 listsSwipeRefresh.setRefreshing(false);
             }
         });
@@ -147,11 +142,9 @@ public class MainActivity extends AppCompatActivity implements Serializable{
 
 
     public static void updateItems(){
-        Call<List<MetaItem>> retorno = servidor.getAllMetaItems(user.getId());
+        Call<List<MetaItem>> request = server.getAllMetaItems(user.getId());
 
-        Log.i("DSI2017","Chamando servidor");
-
-        retorno.enqueue(new Callback<List<MetaItem>>() {
+        request.enqueue(new Callback<List<MetaItem>>() {
             @Override
             public void onResponse(Call<List<MetaItem>> call, Response<List<MetaItem>> response) {
                 List<MetaItem> listData = response.body();
@@ -165,7 +158,6 @@ public class MainActivity extends AppCompatActivity implements Serializable{
 
             @Override
             public void onFailure(Call<List<MetaItem>> call, Throwable t) {
-                Log.i("DSI2017", "Não deu");
                 metaItemsSwipeRefresh.setRefreshing(false);
             }
         });
@@ -174,11 +166,9 @@ public class MainActivity extends AppCompatActivity implements Serializable{
 
 
     public static void updateCategories(){
-        Call<List<Category>> retorno = servidor.getAllCategories(user.getId());
+        Call<List<Category>> request = server.getAllCategories(user.getId());
 
-        Log.i("DSI2017","Chamando servidor");
-
-        retorno.enqueue(new Callback<List<Category>>() {
+        request.enqueue(new Callback<List<Category>>() {
             @Override
             public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
                 List<Category> listData = response.body();
@@ -186,14 +176,13 @@ public class MainActivity extends AppCompatActivity implements Serializable{
                 if(listData != null) {
                     categoriesAdapter.clear();
                     categoriesAdapter.addAll(listData);
-                    categorieswipeRefresh.setRefreshing(false);
+                    categoriesSwipeRefresh.setRefreshing(false);
                 }
             }
 
             @Override
             public void onFailure(Call<List<Category>> call, Throwable t) {
-                Log.i("DSI2017", "Não deu");
-                listsSwipeRefresh.setRefreshing(false);
+                categoriesSwipeRefresh.setRefreshing(false);
             }
         });
 
@@ -201,19 +190,14 @@ public class MainActivity extends AppCompatActivity implements Serializable{
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         } else if(id == R.id.logout) {
@@ -233,7 +217,6 @@ public class MainActivity extends AppCompatActivity implements Serializable{
             lists = (ListView) rootView.findViewById(R.id.lists);
             listsSwipeRefresh = (SwipeRefreshLayout) rootView.findViewById(R.id.swiperefresh_lists);
             lists.setAdapter(listsAdapter);
-            Log.i("DSI2017", "AAAAAAAAAAAAAA");
             listsSwipeRefresh.setOnRefreshListener(
                     new SwipeRefreshLayout.OnRefreshListener() {
                         @Override
@@ -243,25 +226,9 @@ public class MainActivity extends AppCompatActivity implements Serializable{
                         }
                     }
             );
-
+            listsSwipeRefresh.setRefreshing(true);
             updateLists();
             return rootView;
-        }
-    }
-
-    @Override
-    public void onRestart() {
-        super.onRestart();
-        switch (mViewPager.getCurrentItem()){
-            case 1:
-                updateItems();
-                return;
-            case 2:
-                updateCategories();
-                return;
-            default:
-                updateLists();
-                break;
         }
     }
 
@@ -275,15 +242,16 @@ public class MainActivity extends AppCompatActivity implements Serializable{
             metaItems = (ListView) rootView.findViewById(R.id.metaitems);
             metaItemsSwipeRefresh = (SwipeRefreshLayout) rootView.findViewById(R.id.swiperefresh_metaitems);
             metaItems.setAdapter(metaItemAdapter);
-
             metaItemsSwipeRefresh.setOnRefreshListener(
                     new SwipeRefreshLayout.OnRefreshListener() {
                         @Override
                         public void onRefresh() {
-                            metaItemsSwipeRefresh.setRefreshing(false);
+                            metaItemsSwipeRefresh.setRefreshing(true);
+                            updateItems();
                         }
                     }
             );
+
             updateItems();
             return rootView;
         }
@@ -297,14 +265,15 @@ public class MainActivity extends AppCompatActivity implements Serializable{
             View rootView = inflater.inflate(R.layout.categories, container, false);
 
             categories = (ListView) rootView.findViewById(R.id.categories);
-            categorieswipeRefresh = (SwipeRefreshLayout) rootView.findViewById(R.id.swiperefresh_categories);
+            categoriesSwipeRefresh = (SwipeRefreshLayout) rootView.findViewById(R.id.swiperefresh_categories);
             categories.setAdapter(categoriesAdapter);
-
-            categorieswipeRefresh.setOnRefreshListener(
+            categoriesSwipeRefresh.setOnRefreshListener(
                     new SwipeRefreshLayout.OnRefreshListener() {
                         @Override
                         public void onRefresh() {
-                            categorieswipeRefresh.setRefreshing(false);
+
+                            categoriesSwipeRefresh.setRefreshing(true);
+                            updateCategories();
                         }
                     }
             );
@@ -314,10 +283,6 @@ public class MainActivity extends AppCompatActivity implements Serializable{
         }
     }
 
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         public SectionsPagerAdapter(FragmentManager fm) {
@@ -343,7 +308,6 @@ public class MainActivity extends AppCompatActivity implements Serializable{
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
             return 3;
         }
 

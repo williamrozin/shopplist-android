@@ -31,24 +31,24 @@ import retrofit2.Response;
 /**
  * Created by william on 11/11/17.
  */
-public class AddListActivity extends AppCompatActivity {
+public class EditListActivity extends AppCompatActivity {
     static MetaItemAdapter metaItemAdapter;
     static ServerInterface server;
     static ListView metaItems;
-    static User user;
+    static ShoppingList list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent i = getIntent();
-        user = (User) i.getSerializableExtra("user");
+        list = (ShoppingList) i.getSerializableExtra("list");
 
         server = ServerConnection.getInstance().getServer();
 
         metaItemAdapter = new MetaItemAdapter(this, R.layout.lists_adapter, new ArrayList<MetaItemList>());
-        setContentView(R.layout.add_list);
+        setContentView(R.layout.edit_list);
 
-        metaItems = (ListView) findViewById(R.id.addlist_metaitems);
+        metaItems = (ListView) findViewById(R.id.editlist_metaitems);
 
         final CheckBox markAll = (CheckBox) findViewById(R.id.check_all);
 
@@ -66,6 +66,10 @@ public class AddListActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        EditText description = (EditText) findViewById(R.id.editText);
+        description.setText(list.getDescription());
+
+
         fillMetaItemList(markAll.isChecked());
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_createList);
@@ -74,23 +78,10 @@ public class AddListActivity extends AppCompatActivity {
             public void onClick(View view) {
                 EditText description = (EditText) findViewById(R.id.editText);
 
-                ShoppingList sl = new ShoppingList();
-                sl.setDescription(description.getText().toString());
-                sl.setUserId(user.getId());
-                for(int i=0; i < metaItemAdapter.getCount(); i++) {
-                    if (metaItemAdapter.getItem(i).isChecked()) {
-                        ListItem listItem = new ListItem();
-                        listItem.setMetaItem(metaItemAdapter.getItem(i).getMetaItem());
-                        if (metaItemAdapter.getItem(i).getMetaItem() != null) {
-                            sl.addListItem(listItem);
-                        }
-                    }
-                }
-
                 if (description.getText().toString().compareTo("") != 0) {
-                    createShoppingList(sl);
+                    Log.i("DSI2017", "ASSD");
                 } else {
-                    Toast.makeText(AddListActivity.this, "Informe um nome para esta lista",
+                    Toast.makeText(EditListActivity.this, "Informe um nome para esta lista",
                             Toast.LENGTH_LONG).show();
                 }
             }
@@ -98,7 +89,7 @@ public class AddListActivity extends AppCompatActivity {
     }
 
     public static void fillMetaItemList(boolean check){
-        Call<List<MetaItem>> request = server.getAllMetaItems(user.getId());
+        Call<List<MetaItem>> request = server.getAllMetaItems(list.getUserId());
         final boolean checkItems = check;
         Log.i("DSI2017","Chamando server");
 
@@ -112,7 +103,16 @@ public class AddListActivity extends AppCompatActivity {
                     for(int i=0; i < listData.size(); i++) {
                         MetaItemList mi = new MetaItemList();
                         mi.setMetaItem(listData.get(i));
-                        if (checkItems) {
+                        boolean checked = false;
+
+                        for(int j=0; j < list.getItems().size(); j++) {
+                            MetaItem item = list.getItems().get(j).getMetaItem();
+                            if (item.equals(listData.get(i))) {
+                                checked = true;
+                            }
+                        }
+
+                        if (checkItems || checked) {
                             mi.setChecked();
                         } else {
                             mi.unsetChecked();
@@ -142,7 +142,7 @@ public class AddListActivity extends AppCompatActivity {
                     onBackPressed();
                     finish();
                 } else {
-                    Toast.makeText(AddListActivity.this, "Ocorreu um erro ao criar a lista",
+                    Toast.makeText(EditListActivity.this, "Ocorreu um erro ao editar a lista",
                             Toast.LENGTH_LONG).show();
                 }
             }

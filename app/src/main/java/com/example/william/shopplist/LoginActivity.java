@@ -32,7 +32,7 @@ import retrofit2.http.Headers;
  * Created by william on 16/11/17.
  */
 public class LoginActivity extends AppCompatActivity {
-    static ServerInterface servidor;
+    static ServerInterface server;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,12 +63,12 @@ public class LoginActivity extends AppCompatActivity {
                 login.setEmail(email.getText().toString());
                 login.setPassword(password.getText().toString());
 
-                servidor = ServerConnection.getInstance().getServidor();
+                server = ServerConnection.getInstance().getServer();
 
-                Call<User> retorno = servidor.login(login);
+                Call<User> request = server.login(login);
 
 
-                retorno.enqueue(new Callback<User>() {
+                request.enqueue(new Callback<User>() {
                     @Override
                     public void onResponse(Call<User> call, Response<User> response) {
 
@@ -86,7 +86,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<User> call, Throwable t) {
-                        Log.i("DSI2017", "Não deu");
+                        Log.i("DSI2017", "Error on login");
                     }
                 });
             }

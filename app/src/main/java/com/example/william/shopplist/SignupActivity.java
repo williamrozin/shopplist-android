@@ -30,7 +30,7 @@ import retrofit2.http.Headers;
  * Created by william on 16/11/17.
  */
 public class SignupActivity extends AppCompatActivity {
-    static ServerInterface servidor;
+    static ServerInterface server;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,11 +63,11 @@ public class SignupActivity extends AppCompatActivity {
                 user.setPassword(password.getText().toString());
                 user.setName(name.getText().toString());
 
-                servidor = ServerConnection.getInstance().getServidor();
+                server = ServerConnection.getInstance().getServer();
 
-                Call<User> retorno = servidor.signup(user);
+                Call<User> request = server.signup(user);
 
-                retorno.enqueue(new Callback<User>() {
+                request.enqueue(new Callback<User>() {
                     @Override
                     public void onResponse(Call<User> call, Response<User> response) {
                         if (response.body() != null) {
@@ -81,7 +81,7 @@ public class SignupActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<User> call, Throwable t) {
-                        Log.i("DSI2017", "deu erro meu chapa");
+                        Log.i("DSI2017", "Error on signup");
                     }
                 });
             }

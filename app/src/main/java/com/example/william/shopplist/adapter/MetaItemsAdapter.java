@@ -23,6 +23,7 @@ import java.util.List;
  * Created by william on 15/11/17.
  */
 public class MetaItemsAdapter extends ArrayAdapter<MetaItem> implements Serializable {
+
     public MetaItemsAdapter(Context context, int textViewResourceId) {
         super(context, textViewResourceId);
     }

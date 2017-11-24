@@ -17,4 +17,8 @@ public class Category implements Serializable{
 	public String getColor() {
 		return this.color;
 	}
+
+	public long getId() {
+		return this.id;
+	}
 }

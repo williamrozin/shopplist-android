@@ -3,12 +3,14 @@ package com.example.william.shopplist;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -31,15 +33,16 @@ import retrofit2.Response;
  */
 public class SelectedListActivity extends AppCompatActivity implements Serializable{
     static ArrayAdapter<ListItem> adapter;
-    static ServerInterface servidor;
+    static ServerInterface server;
     static ListView listItems;
+    static ShoppingList list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent i = getIntent();
-        ShoppingList list = (ShoppingList) i.getSerializableExtra("list");
-        servidor = ServerConnection.getInstance().getServidor();
+        list = (ShoppingList) i.getSerializableExtra("list");
+        server = ServerConnection.getInstance().getServer();
 
         adapter = new ListItemAdapter(this, android.R.layout.simple_list_item_1,new ArrayList<ListItem>());
         setContentView(R.layout.selected_list);
@@ -54,6 +57,16 @@ public class SelectedListActivity extends AppCompatActivity implements Serializa
 
         listItems = (ListView) findViewById(R.id.list);
         listItems.setAdapter(adapter);
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_edit);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent newActivity = new Intent(SelectedListActivity.this, EditListActivity.class);
+                newActivity.putExtra("list", list);
+                startActivity(newActivity);
+            }
+        });
     }
 
     @Override
@@ -116,11 +129,11 @@ public class SelectedListActivity extends AppCompatActivity implements Serializa
     }
 
     public void removeList(long id) {
-        servidor = ServerConnection.getInstance().getServidor();
+        server = ServerConnection.getInstance().getServer();
 
-        Call<Void> retorno = servidor.removeList(id);
+        Call<Void> request = server.removeList(id);
 
-        retorno.enqueue(new Callback<Void>() {
+        request.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 onBackPressed();
