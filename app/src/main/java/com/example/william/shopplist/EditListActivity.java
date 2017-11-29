@@ -36,6 +36,7 @@ public class EditListActivity extends AppCompatActivity {
     static ServerInterface server;
     static ListView metaItems;
     static ShoppingList list;
+    static List<MetaItem> allItems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,9 +78,23 @@ public class EditListActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 EditText description = (EditText) findViewById(R.id.editText);
+                list.setDescription(description.getText().toString());
 
                 if (description.getText().toString().compareTo("") != 0) {
-                    Log.i("DSI2017", "ASSD");
+                    list.removeAllItems();
+
+                    for(int i=0; i < metaItemAdapter.getCount(); i++) {
+                        if (metaItemAdapter.getItem(i).isChecked()) {
+                            ListItem listItem = new ListItem();
+                            listItem.setMetaItem(metaItemAdapter.getItem(i).getMetaItem());
+                            if (metaItemAdapter.getItem(i).getMetaItem() != null) {
+                                Log.i("DSI2017 listitem", listItem.getDescription());
+                                list.addListItem(listItem);
+                            }
+                        }
+                    }
+
+                    updateShoppingList(list);
                 } else {
                     Toast.makeText(EditListActivity.this, "Informe um nome para esta lista",
                             Toast.LENGTH_LONG).show();
@@ -91,7 +106,6 @@ public class EditListActivity extends AppCompatActivity {
     public static void fillMetaItemList(boolean check){
         Call<List<MetaItem>> request = server.getAllMetaItems(list.getUserId());
         final boolean checkItems = check;
-        Log.i("DSI2017","Chamando server");
 
         request.enqueue(new Callback<List<MetaItem>>() {
             @Override
@@ -99,8 +113,11 @@ public class EditListActivity extends AppCompatActivity {
                 List<MetaItem> listData = response.body();
 
                 if(listData != null) {
+
                     metaItemAdapter.clear();
+
                     for(int i=0; i < listData.size(); i++) {
+
                         MetaItemList mi = new MetaItemList();
                         mi.setMetaItem(listData.get(i));
                         boolean checked = false;
@@ -112,11 +129,12 @@ public class EditListActivity extends AppCompatActivity {
                             }
                         }
 
-                        if (checkItems || checked) {
+                        if (checked) {
                             mi.setChecked();
                         } else {
                             mi.unsetChecked();
                         }
+
                         metaItemAdapter.add(mi);
                     }
                 }
@@ -130,26 +148,21 @@ public class EditListActivity extends AppCompatActivity {
         metaItems.setAdapter(metaItemAdapter);
     }
 
-    public void createShoppingList(ShoppingList list) {
-        Call<ShoppingList> request = server.createShoppingList(list);
+    public void updateShoppingList(ShoppingList list) {
+        Call<Void> request = server.updateShoppingList(list.getId(), list);
 
 
-        request.enqueue(new Callback<ShoppingList>() {
+        request.enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(Call<ShoppingList> call, Response<ShoppingList> response) {
-
-                if (response.body() != null) {
-                    onBackPressed();
-                    finish();
-                } else {
-                    Toast.makeText(EditListActivity.this, "Ocorreu um erro ao editar a lista",
-                            Toast.LENGTH_LONG).show();
-                }
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                onBackPressed();
+                finish();
             }
 
             @Override
-            public void onFailure(Call<ShoppingList> call, Throwable t) {
-                Log.i("DSI2017", "Não deu");
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(EditListActivity.this, "Ocorreu um erro ao editar a lista",
+                        Toast.LENGTH_LONG).show();
             }
         });
     }

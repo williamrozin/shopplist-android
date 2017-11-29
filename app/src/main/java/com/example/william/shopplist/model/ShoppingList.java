@@ -49,4 +49,8 @@ public class ShoppingList implements Serializable{
     public long getUserId() {
         return this.userId;
     }
+
+    public void removeAllItems() {
+        this.items = new ArrayList<>();
+    }
 }

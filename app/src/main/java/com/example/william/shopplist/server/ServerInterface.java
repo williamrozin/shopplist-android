@@ -46,6 +46,10 @@ public interface ServerInterface {
     @POST("lists")
     public Call<ShoppingList> createShoppingList(@Body ShoppingList shoppingList);
 
+    @Headers("Content-type: application/json")
+    @PUT("lists/{id}")
+    public Call<Void> updateShoppingList(@Path("id") long id, @Body ShoppingList shoppingList);
+
     @PUT("item/{id}/check")
     public Call<Void> checkItem(@Path("id") long id);
 

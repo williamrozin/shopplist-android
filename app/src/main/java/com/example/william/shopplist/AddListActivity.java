@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.william.shopplist.adapter.MetaItemAdapter;
@@ -36,6 +37,8 @@ public class AddListActivity extends AppCompatActivity {
     static ServerInterface server;
     static ListView metaItems;
     static User user;
+    static CheckBox markAll;
+    static ProgressBar spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +53,9 @@ public class AddListActivity extends AppCompatActivity {
 
         metaItems = (ListView) findViewById(R.id.addlist_metaitems);
 
-        final CheckBox markAll = (CheckBox) findViewById(R.id.check_all);
-
+        spinner = (ProgressBar)findViewById(R.id.progress);
+        spinner.setVisibility(View.VISIBLE);
+        markAll = (CheckBox) findViewById(R.id.check_all);
         markAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,6 +69,7 @@ public class AddListActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+
 
         fillMetaItemList(markAll.isChecked());
 
@@ -100,11 +105,11 @@ public class AddListActivity extends AppCompatActivity {
     public static void fillMetaItemList(boolean check){
         Call<List<MetaItem>> request = server.getAllMetaItems(user.getId());
         final boolean checkItems = check;
-        Log.i("DSI2017","Chamando server");
 
         request.enqueue(new Callback<List<MetaItem>>() {
             @Override
             public void onResponse(Call<List<MetaItem>> call, Response<List<MetaItem>> response) {
+                spinner.setVisibility(View.GONE);
                 List<MetaItem> listData = response.body();
 
                 if(listData != null) {

@@ -17,7 +17,6 @@ import android.widget.ListView;
 import com.example.william.shopplist.adapter.ListItemAdapter;
 import com.example.william.shopplist.model.ListItem;
 import com.example.william.shopplist.model.ShoppingList;
-import com.example.william.shopplist.model.User;
 import com.example.william.shopplist.server.ServerConnection;
 import com.example.william.shopplist.server.ServerInterface;
 
