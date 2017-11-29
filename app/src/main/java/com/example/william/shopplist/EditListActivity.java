@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.william.shopplist.adapter.MetaItemAdapter;
@@ -36,7 +37,8 @@ public class EditListActivity extends AppCompatActivity {
     static ServerInterface server;
     static ListView metaItems;
     static ShoppingList list;
-    static List<MetaItem> allItems;
+    static CheckBox markAll;
+    static ProgressBar spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +53,9 @@ public class EditListActivity extends AppCompatActivity {
 
         metaItems = (ListView) findViewById(R.id.editlist_metaitems);
 
-        final CheckBox markAll = (CheckBox) findViewById(R.id.check_all);
-
+        spinner = (ProgressBar)findViewById(R.id.progress);
+        spinner.setVisibility(View.VISIBLE);
+        markAll = (CheckBox) findViewById(R.id.check_all);
         markAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -111,6 +114,7 @@ public class EditListActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<MetaItem>> call, Response<List<MetaItem>> response) {
                 List<MetaItem> listData = response.body();
+                spinner.setVisibility(View.GONE);
 
                 if(listData != null) {
 
