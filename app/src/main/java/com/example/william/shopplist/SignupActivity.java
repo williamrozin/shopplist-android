@@ -5,26 +5,19 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.william.shopplist.model.ShoppingList;
 import com.example.william.shopplist.model.User;
-import com.example.william.shopplist.model.Login;
 import com.example.william.shopplist.server.ServerConnection;
 import com.example.william.shopplist.server.ServerInterface;
-
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.http.Header;
-import retrofit2.http.Headers;
 
 /**
  * Created by william on 16/11/17.
@@ -81,7 +74,8 @@ public class SignupActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<User> call, Throwable t) {
-                        Log.i("DSI2017", "Error on signup");
+                        Toast.makeText(SignupActivity.this, "Ocorreu um erro no cadastro",
+                                Toast.LENGTH_LONG).show();
                     }
                 });
             }

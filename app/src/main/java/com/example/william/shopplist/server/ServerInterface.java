@@ -62,6 +62,8 @@ public interface ServerInterface {
     @GET("lists/{id}")
     public Call<ShoppingList> getList(@Path("id") long id);
 
+    @PUT("category/{id}")
+    public Call<Void> updateCategory(@Path("id") long id, Category category);
 /*
 
     @POST("cliente/")

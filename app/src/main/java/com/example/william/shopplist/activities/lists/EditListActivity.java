@@ -1,4 +1,4 @@
-package com.example.william.shopplist;
+package com.example.william.shopplist.activities.lists;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,12 +13,12 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.william.shopplist.R;
 import com.example.william.shopplist.adapter.MetaItemAdapter;
 import com.example.william.shopplist.model.ListItem;
 import com.example.william.shopplist.model.MetaItem;
 import com.example.william.shopplist.model.MetaItemList;
 import com.example.william.shopplist.model.ShoppingList;
-import com.example.william.shopplist.model.User;
 import com.example.william.shopplist.server.ServerConnection;
 import com.example.william.shopplist.server.ServerInterface;
 
@@ -32,11 +32,11 @@ import retrofit2.Response;
 /**
  * Created by william on 11/11/17.
  */
-public class AddListActivity extends AppCompatActivity {
+public class EditListActivity extends AppCompatActivity {
     static MetaItemAdapter metaItemAdapter;
     static ServerInterface server;
     static ListView metaItems;
-    static User user;
+    static ShoppingList list;
     static CheckBox markAll;
     static ProgressBar spinner;
 
@@ -44,14 +44,14 @@ public class AddListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent i = getIntent();
-        user = (User) i.getSerializableExtra("user");
+        list = (ShoppingList) i.getSerializableExtra("list");
 
         server = ServerConnection.getInstance().getServer();
 
         metaItemAdapter = new MetaItemAdapter(this, R.layout.lists_adapter, new ArrayList<MetaItemList>());
-        setContentView(R.layout.add_list);
+        setContentView(R.layout.edit_list);
 
-        metaItems = (ListView) findViewById(R.id.addlist_metaitems);
+        metaItems = (ListView) findViewById(R.id.editlist_metaitems);
 
         spinner = (ProgressBar)findViewById(R.id.progress);
         spinner.setVisibility(View.VISIBLE);
@@ -65,10 +65,13 @@ public class AddListActivity extends AppCompatActivity {
 
         Toolbar mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mActionBarToolbar);
-        getSupportActionBar().setTitle("Adicionar lista");
+        getSupportActionBar().setTitle("Editar lista");
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        EditText description = (EditText) findViewById(R.id.editText);
+        description.setText(list.getDescription());
 
 
         fillMetaItemList(markAll.isChecked());
@@ -78,24 +81,24 @@ public class AddListActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 EditText description = (EditText) findViewById(R.id.editText);
-
-                ShoppingList sl = new ShoppingList();
-                sl.setDescription(description.getText().toString());
-                sl.setUserId(user.getId());
-                for(int i=0; i < metaItemAdapter.getCount(); i++) {
-                    if (metaItemAdapter.getItem(i).isChecked()) {
-                        ListItem listItem = new ListItem();
-                        listItem.setMetaItem(metaItemAdapter.getItem(i).getMetaItem());
-                        if (metaItemAdapter.getItem(i).getMetaItem() != null) {
-                            sl.addListItem(listItem);
-                        }
-                    }
-                }
+                list.setDescription(description.getText().toString());
 
                 if (description.getText().toString().compareTo("") != 0) {
-                    createShoppingList(sl);
+                    list.removeAllItems();
+
+                    for(int i=0; i < metaItemAdapter.getCount(); i++) {
+                        if (metaItemAdapter.getItem(i).isChecked()) {
+                            ListItem listItem = new ListItem();
+                            listItem.setMetaItem(metaItemAdapter.getItem(i).getMetaItem());
+                            if (metaItemAdapter.getItem(i).getMetaItem() != null) {
+                                list.addListItem(listItem);
+                            }
+                        }
+                    }
+
+                    updateShoppingList(list);
                 } else {
-                    Toast.makeText(AddListActivity.this, "Informe um nome para esta lista",
+                    Toast.makeText(EditListActivity.this, "Informe um nome para esta lista",
                             Toast.LENGTH_LONG).show();
                 }
             }
@@ -103,25 +106,38 @@ public class AddListActivity extends AppCompatActivity {
     }
 
     public static void fillMetaItemList(boolean check){
-        Call<List<MetaItem>> request = server.getAllMetaItems(user.getId());
+        Call<List<MetaItem>> request = server.getAllMetaItems(list.getUserId());
         final boolean checkItems = check;
 
         request.enqueue(new Callback<List<MetaItem>>() {
             @Override
             public void onResponse(Call<List<MetaItem>> call, Response<List<MetaItem>> response) {
-                spinner.setVisibility(View.GONE);
                 List<MetaItem> listData = response.body();
+                spinner.setVisibility(View.GONE);
 
                 if(listData != null) {
+
                     metaItemAdapter.clear();
+
                     for(int i=0; i < listData.size(); i++) {
+
                         MetaItemList mi = new MetaItemList();
                         mi.setMetaItem(listData.get(i));
-                        if (checkItems) {
+                        boolean checked = false;
+
+                        for(int j=0; j < list.getItems().size(); j++) {
+                            MetaItem item = list.getItems().get(j).getMetaItem();
+                            if (item.equals(listData.get(i))) {
+                                checked = true;
+                            }
+                        }
+
+                        if (checked) {
                             mi.setChecked();
                         } else {
                             mi.unsetChecked();
                         }
+
                         metaItemAdapter.add(mi);
                     }
                 }
@@ -135,26 +151,21 @@ public class AddListActivity extends AppCompatActivity {
         metaItems.setAdapter(metaItemAdapter);
     }
 
-    public void createShoppingList(ShoppingList list) {
-        Call<ShoppingList> request = server.createShoppingList(list);
+    public void updateShoppingList(ShoppingList list) {
+        Call<Void> request = server.updateShoppingList(list.getId(), list);
 
 
-        request.enqueue(new Callback<ShoppingList>() {
+        request.enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(Call<ShoppingList> call, Response<ShoppingList> response) {
-
-                if (response.body() != null) {
-                    onBackPressed();
-                    finish();
-                } else {
-                    Toast.makeText(AddListActivity.this, "Ocorreu um erro ao criar a lista",
-                            Toast.LENGTH_LONG).show();
-                }
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                onBackPressed();
+                finish();
             }
 
             @Override
-            public void onFailure(Call<ShoppingList> call, Throwable t) {
-                Log.i("DSI2017", "Não deu");
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(EditListActivity.this, "Ocorreu um erro ao editar a lista",
+                        Toast.LENGTH_LONG).show();
             }
         });
     }

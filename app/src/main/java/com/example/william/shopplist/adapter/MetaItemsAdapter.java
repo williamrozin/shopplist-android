@@ -1,9 +1,7 @@
 package com.example.william.shopplist.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,10 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.william.shopplist.R;
-import com.example.william.shopplist.SelectedListActivity;
-import com.example.william.shopplist.model.Category;
 import com.example.william.shopplist.model.MetaItem;
-import com.example.william.shopplist.model.ShoppingList;
 
 import java.io.Serializable;
 import java.util.List;

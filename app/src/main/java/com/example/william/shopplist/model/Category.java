@@ -21,4 +21,8 @@ public class Category implements Serializable{
 	public long getId() {
 		return this.id;
 	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
 }

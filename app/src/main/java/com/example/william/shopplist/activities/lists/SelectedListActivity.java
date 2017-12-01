@@ -1,4 +1,4 @@
-package com.example.william.shopplist;
+package com.example.william.shopplist.activities.lists;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.william.shopplist.R;
 import com.example.william.shopplist.adapter.ListItemAdapter;
 import com.example.william.shopplist.model.ListItem;
 import com.example.william.shopplist.model.ShoppingList;

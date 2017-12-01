@@ -1,9 +1,7 @@
 package com.example.william.shopplist.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,9 +10,7 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.example.william.shopplist.R;
-import com.example.william.shopplist.model.MetaItem;
 import com.example.william.shopplist.model.MetaItemList;
-import com.example.william.shopplist.model.ShoppingList;
 
 import java.io.Serializable;
 import java.util.List;
@@ -23,10 +19,6 @@ import java.util.List;
  * Created by william on 15/11/17.
  */
 public class MetaItemAdapter extends ArrayAdapter<MetaItemList> implements Serializable {
-
-    public MetaItemAdapter(Context context, int textViewResourceId) {
-        super(context, textViewResourceId);
-    }
 
     public MetaItemAdapter(Context context, int resource, List<MetaItemList> items) {
         super(context, resource, items);

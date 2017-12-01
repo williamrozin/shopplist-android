@@ -2,7 +2,6 @@ package com.example.william.shopplist.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.william.shopplist.R;
-import com.example.william.shopplist.SelectedListActivity;
+import com.example.william.shopplist.activities.lists.SelectedListActivity;
 import com.example.william.shopplist.model.ShoppingList;
 
 import java.io.Serializable;
@@ -20,10 +19,6 @@ import java.util.List;
  * Created by william on 15/11/17.
  */
 public class ListsAdapter extends ArrayAdapter<ShoppingList> implements Serializable {
-
-    public ListsAdapter(Context context, int textViewResourceId) {
-        super(context, textViewResourceId);
-    }
 
     public ListsAdapter(Context context, int resource, List<ShoppingList> items) {
         super(context, resource, items);

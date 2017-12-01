@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import android.support.design.widget.TabLayout;
@@ -24,6 +23,7 @@ import android.widget.ListView;
 import com.example.william.shopplist.adapter.CategoriesAdapter;
 import com.example.william.shopplist.adapter.ListsAdapter;
 import com.example.william.shopplist.adapter.MetaItemsAdapter;
+import com.example.william.shopplist.activities.lists.AddListActivity;
 import com.example.william.shopplist.model.Category;
 import com.example.william.shopplist.model.MetaItem;
 import com.example.william.shopplist.model.ShoppingList;
