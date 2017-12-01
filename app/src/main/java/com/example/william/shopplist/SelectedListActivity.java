@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.william.shopplist.adapter.ListItemAdapter;
 import com.example.william.shopplist.model.ListItem;
@@ -66,6 +67,12 @@ public class SelectedListActivity extends AppCompatActivity implements Serializa
                 startActivity(newActivity);
             }
         });
+    }
+
+    @Override
+    public void onRestart() {
+        super.onRestart();
+        refreshSList(list.getId());
     }
 
     @Override
@@ -141,6 +148,29 @@ public class SelectedListActivity extends AppCompatActivity implements Serializa
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
                 Log.i("DSI2017", "deu erro meu chapa");
+            }
+        });
+    }
+
+    public void refreshSList(long id) {
+        Call<ShoppingList> request = server.getList(id);
+
+
+        request.enqueue(new Callback<ShoppingList>() {
+            @Override
+            public void onResponse(Call<ShoppingList> call, Response<ShoppingList> response) {
+                ShoppingList refreshedList = response.body();
+
+                getSupportActionBar().setTitle(refreshedList.getDescription());
+                list.setDescription(refreshedList.getDescription());
+                adapter.clear();
+                adapter.addAll(refreshedList.getItems());
+            }
+
+            @Override
+            public void onFailure(Call<ShoppingList> call, Throwable t) {
+                Toast.makeText(SelectedListActivity.this, "Ocorreu um erro ao atualizar a lista",
+                        Toast.LENGTH_LONG).show();
             }
         });
     }

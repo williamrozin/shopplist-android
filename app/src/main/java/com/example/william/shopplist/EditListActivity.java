@@ -65,7 +65,7 @@ public class EditListActivity extends AppCompatActivity {
 
         Toolbar mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mActionBarToolbar);
-        getSupportActionBar().setTitle("Adicionar lista");
+        getSupportActionBar().setTitle("Editar lista");
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -91,7 +91,6 @@ public class EditListActivity extends AppCompatActivity {
                             ListItem listItem = new ListItem();
                             listItem.setMetaItem(metaItemAdapter.getItem(i).getMetaItem());
                             if (metaItemAdapter.getItem(i).getMetaItem() != null) {
-                                Log.i("DSI2017 listitem", listItem.getDescription());
                                 list.addListItem(listItem);
                             }
                         }

@@ -58,6 +58,10 @@ public interface ServerInterface {
 
     @DELETE("lists/{id}")
     public Call<Void> removeList(@Path("id") long id);
+
+    @GET("lists/{id}")
+    public Call<ShoppingList> getList(@Path("id") long id);
+
 /*
 
     @POST("cliente/")
