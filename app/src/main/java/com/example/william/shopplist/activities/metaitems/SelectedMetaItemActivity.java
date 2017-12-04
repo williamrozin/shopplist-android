@@ -96,7 +96,7 @@ public class SelectedMetaItemActivity extends AppCompatActivity implements Seria
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (metaItem.getUserId() != 0) {
-            getMenuInflater().inflate(R.menu.menu_selected_category, menu);
+            getMenuInflater().inflate(R.menu.menu_selected_metaitem, menu);
         }
         return super.onCreateOptionsMenu(menu);
 
@@ -106,7 +106,7 @@ public class SelectedMetaItemActivity extends AppCompatActivity implements Seria
 
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent = getIntent();
-
+    Log.i("DSI2017VER", Long.toString(metaItem.getId()));
         if (item.getItemId() == R.id.delete) {
             new AlertDialog.Builder(this)
                     .setIcon(android.R.drawable.ic_delete)
@@ -135,7 +135,12 @@ public class SelectedMetaItemActivity extends AppCompatActivity implements Seria
         request.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-                onBackPressed();
+                if (response.code() == 500) {
+                    Toast.makeText(SelectedMetaItemActivity.this, "Este produto está vinculado a uma lista e não pode ser removido",
+                            Toast.LENGTH_LONG).show();
+                } else {
+                    onBackPressed();
+                }
             }
 
             @Override

@@ -1,7 +1,9 @@
 package com.example.william.shopplist;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -206,7 +208,20 @@ public class MainActivity extends AppCompatActivity implements Serializable{
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_settings) {
+
+        if (id == R.id.action_about) {
+            AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+
+            alertDialog.setTitle("Sobre");
+            alertDialog.setMessage("Este aplicativo foi desenvolvido como parte do das atividades relacionadas à matéria de Desenvolvimento de Sisteas de Informação \n \n William Rozin Gaspar \n Luan Alves Daniel \n \n Versão 0.5.0");
+            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+            alertDialog.show();
+
             return true;
         } else if(id == R.id.logout) {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
