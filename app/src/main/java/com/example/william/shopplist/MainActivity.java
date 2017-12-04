@@ -321,7 +321,7 @@ public class MainActivity extends AppCompatActivity implements Serializable{
                 case 0:
                     return "Minhas Listas";
                 case 1:
-                    return "Itens";
+                    return "Produtos";
                 case 2:
                     return "Categorias";
             }

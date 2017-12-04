@@ -1,6 +1,7 @@
 package com.example.william.shopplist.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.william.shopplist.R;
+import com.example.william.shopplist.activities.metaitems.SelectedMetaItemActivity;
 import com.example.william.shopplist.model.MetaItem;
 
 import java.io.Serializable;
@@ -58,8 +60,9 @@ public class MetaItemsAdapter extends ArrayAdapter<MetaItem> implements Serializ
         v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Intent openItem = new Intent(view.getContext(), SelectedListActivity.class);
-                //view.getContext().startActivity(openItem);
+            Intent openItem = new Intent(view.getContext(), SelectedMetaItemActivity.class);
+            openItem.putExtra("metaItem", metaItem);
+            view.getContext().startActivity(openItem);
             }
         });
         return v;

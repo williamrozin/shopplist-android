@@ -75,4 +75,18 @@ public interface ServerInterface {
     @Headers("Content-type: application/json")
     @POST("category")
     public Call<Void> createCategory(@Body Category category);
+
+    @Headers("Content-type: application/json")
+    @PUT("meta-item/{id}")
+    public Call<Void> updateMetaItem(@Path("id") long id, @Body MetaItem metaItem);
+
+    @DELETE("mea-item/{id}")
+    public Call<Void> removeMetaItem(@Path("id") long id);
+
+    @GET("meta-item/{id}")
+    public Call<MetaItem> getMetaItem(@Path("id") long id);
+
+    @Headers("Content-type: application/json")
+    @POST("meta-item")
+    public Call<Void> createMetaItem(@Body MetaItem metaItem);
 }
