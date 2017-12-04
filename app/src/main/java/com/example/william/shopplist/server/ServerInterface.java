@@ -64,10 +64,14 @@ public interface ServerInterface {
 
     @PUT("category/{id}")
     public Call<Void> updateCategory(@Path("id") long id, Category category);
-/*
 
-    @POST("cliente/")
-    public Call<String> insertClientes(@Body Cliente c);
-*/
+    @DELETE("category/{id}")
+    public Call<Void> removeCategory(@Path("id") long id);
 
+    @GET("category/{id}")
+    public Call<Category> getCategory(@Path("id") long id);
+
+    @Headers("Content-type: application/json")
+    @POST("category")
+    public Call<Void> createCategory(@Body Category category);
 }

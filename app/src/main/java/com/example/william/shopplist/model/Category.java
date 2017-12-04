@@ -4,6 +4,7 @@ import java.io.Serializable;
 public class Category implements Serializable{
 	private long id;
 	private String color;
+	private long userId;
 	private String description;
 
 	public String getDescription() {
@@ -25,4 +26,21 @@ public class Category implements Serializable{
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public void setColor(String color) {
+		this.color = color;
+	}
+
+	public long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(long userId) {
+		this.userId = userId;
+	}
+
 }

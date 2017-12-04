@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.example.william.shopplist.activities.categories.AddCategoryActivity;
 import com.example.william.shopplist.adapter.CategoriesAdapter;
 import com.example.william.shopplist.adapter.ListsAdapter;
 import com.example.william.shopplist.adapter.MetaItemsAdapter;
@@ -86,11 +87,14 @@ public class MainActivity extends AppCompatActivity implements Serializable{
                     case 1:
                         return;
                     case 2:
+                        Intent addCategory = new Intent(MainActivity.this, AddCategoryActivity.class);
+                        addCategory.putExtra("user", user);
+                        startActivity(addCategory);
                         return;
                     default:
-                        Intent addItem = new Intent(MainActivity.this, AddListActivity.class);
-                        addItem.putExtra("user", user);
-                        startActivity(addItem);
+                        Intent addList = new Intent(MainActivity.this, AddListActivity.class);
+                        addList.putExtra("user", user);
+                        startActivity(addList);
                         break;
                 }
             }

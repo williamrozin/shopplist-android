@@ -1,6 +1,7 @@
 package com.example.william.shopplist.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,8 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.william.shopplist.R;
+import com.example.william.shopplist.activities.categories.SelectedCategoryActivity;
+import com.example.william.shopplist.activities.lists.SelectedListActivity;
 import com.example.william.shopplist.model.Category;
 
 import java.io.Serializable;
@@ -52,8 +55,9 @@ public class CategoriesAdapter extends ArrayAdapter<Category> implements Seriali
         v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Intent openItem = new Intent(view.getContext(), SelectedListActivity.class);
-                //view.getContext().startActivity(openItem);
+                Intent openItem = new Intent(view.getContext(), SelectedCategoryActivity.class);
+                openItem.putExtra("category", category);
+                view.getContext().startActivity(openItem);
             }
         });
         return v;

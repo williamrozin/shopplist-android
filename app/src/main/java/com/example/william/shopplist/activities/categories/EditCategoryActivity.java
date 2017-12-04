@@ -1,4 +1,4 @@
-package com.example.william.shopplist.activities.lists;
+package com.example.william.shopplist.activities.categories;
 
 import android.content.Intent;
 import android.os.Bundle;
