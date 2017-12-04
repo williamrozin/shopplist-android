@@ -116,7 +116,7 @@ public class SelectedMetaItemActivity extends AppCompatActivity implements Seria
                     {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            removeCategory(category.getId());
+                            removeMetaItem(metaItem.getId());
                         }
 
                     })
@@ -127,7 +127,7 @@ public class SelectedMetaItemActivity extends AppCompatActivity implements Seria
         return super.onOptionsItemSelected(item);
 
     }
-    public void removeCategory(long id) {
+    public void removeMetaItem(long id) {
         server = ServerConnection.getInstance().getServer();
 
         Call<Void> request = server.removeMetaItem(id);

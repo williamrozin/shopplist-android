@@ -80,7 +80,7 @@ public interface ServerInterface {
     @PUT("meta-item/{id}")
     public Call<Void> updateMetaItem(@Path("id") long id, @Body MetaItem metaItem);
 
-    @DELETE("mea-item/{id}")
+    @DELETE("meta-item/{id}")
     public Call<Void> removeMetaItem(@Path("id") long id);
 
     @GET("meta-item/{id}")

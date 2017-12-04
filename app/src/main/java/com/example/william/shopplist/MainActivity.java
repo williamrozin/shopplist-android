@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.example.william.shopplist.activities.categories.AddCategoryActivity;
+import com.example.william.shopplist.activities.metaitems.AddMetaItemActivity;
 import com.example.william.shopplist.adapter.CategoriesAdapter;
 import com.example.william.shopplist.adapter.ListsAdapter;
 import com.example.william.shopplist.adapter.MetaItemsAdapter;
@@ -85,6 +86,9 @@ public class MainActivity extends AppCompatActivity implements Serializable{
             public void onClick(View view) {
                 switch (mViewPager.getCurrentItem()){
                     case 1:
+                        Intent addMetaItem = new Intent(MainActivity.this, AddMetaItemActivity.class);
+                        addMetaItem.putExtra("user", user);
+                        startActivity(addMetaItem);
                         return;
                     case 2:
                         Intent addCategory = new Intent(MainActivity.this, AddCategoryActivity.class);
