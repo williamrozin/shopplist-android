@@ -61,7 +61,8 @@
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
                 android:hint="Email"
-                android:textColor="#FFFFFF"/>
+                android:textColor="#FFFFFF"
+                android:textIsSelectable="false" />
         </android.support.design.widget.TextInputLayout>
 
         <!--  Password Label -->
@@ -75,7 +76,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
                 android:hint="Password"
-                android:textColor="#FFFFFF"/>
+                android:textColor="#FFFFFF" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.v7.widget.AppCompatButton

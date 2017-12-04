@@ -212,8 +212,8 @@ public class MainActivity extends AppCompatActivity implements Serializable{
         if (id == R.id.action_about) {
             AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
 
-            alertDialog.setTitle("Sobre");
-            alertDialog.setMessage("Este aplicativo foi desenvolvido como parte do das atividades relacionadas à matéria de Desenvolvimento de Sisteas de Informação \n \n William Rozin Gaspar \n Luan Alves Daniel \n \n Versão 0.5.0");
+            alertDialog.setTitle("Sobre o Shopplist");
+            alertDialog.setMessage("Este aplicativo foi desenvolvido como parte das atividades relacionadas à matéria de Desenvolvimento de Sistemas de Informação \n \n William Rozin Gaspar \n Luan Alves Daniel \n \n Versão 0.5.0");
             alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
