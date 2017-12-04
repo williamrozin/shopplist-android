@@ -7,10 +7,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.william.shopplist.R;
@@ -37,6 +40,8 @@ public class EditCategoryActivity extends AppCompatActivity {
     MetaItemAdapter metaItemAdapter;
     ServerInterface server;
     Category category;
+    String color;
+    Spinner dropdown;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,13 +61,15 @@ public class EditCategoryActivity extends AppCompatActivity {
         EditText description = (EditText) findViewById(R.id.editText);
         description.setText(category.getDescription());
 
+        color = "#D32F2F";
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_createList);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 EditText description = (EditText) findViewById(R.id.editText);
                 category.setDescription(description.getText().toString());
-
+                category.setColor(color);
                 if (description.getText().toString().compareTo("") != 0) {
                     updateCategory(category);
                 } else {
@@ -71,11 +78,51 @@ public class EditCategoryActivity extends AppCompatActivity {
                 }
             }
         });
+
+        dropdown = (Spinner) findViewById(R.id.dropdown);
+        String[] items = new String[]{"Vermelho", "Verde", "Azul", "Amarelo", "Alaranjado", "Marrom", "Preto"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, items);
+        dropdown.setAdapter(adapter);
+        dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int position, long id) {
+                color = (String) parent.getItemAtPosition(position);
+
+                switch ((String) parent.getItemAtPosition(position)) {
+                    case "Verde":
+                        color = "#388E3C";
+                        break;
+                    case "Azul":
+                        color = "#1976D2";
+                        break;
+                    case "Amarelo":
+                        color = "#FBC02D";
+                        break;
+                    case "Alaranjado":
+                        color = "#F57C00";
+                        break;
+                    case "Marrom":
+                        color = "#5D4037";
+                        break;
+                    case "Preto":
+                        color = "#000000";
+                        break;
+                    default:
+                        color = "#D32F2F";
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // TODO Auto-generated method stub
+            }
+        });
     }
 
     public void updateCategory(Category cat) {
         Call<Void> request = server.updateCategory(cat.getId(), cat);
-
 
         request.enqueue(new Callback<Void>() {
             @Override

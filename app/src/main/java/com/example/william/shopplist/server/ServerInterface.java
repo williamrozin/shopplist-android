@@ -20,7 +20,7 @@ import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 /**
- * Created by walte on 18/10/2017.
+ * Created by william on 18/10/2017.
  */
 
 public interface ServerInterface {
@@ -62,8 +62,9 @@ public interface ServerInterface {
     @GET("lists/{id}")
     public Call<ShoppingList> getList(@Path("id") long id);
 
+    @Headers("Content-type: application/json")
     @PUT("category/{id}")
-    public Call<Void> updateCategory(@Path("id") long id, Category category);
+    public Call<Void> updateCategory(@Path("id") long id, @Body Category category);
 
     @DELETE("category/{id}")
     public Call<Void> removeCategory(@Path("id") long id);

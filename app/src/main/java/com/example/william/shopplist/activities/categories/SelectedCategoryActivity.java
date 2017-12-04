@@ -150,6 +150,8 @@ public class SelectedCategoryActivity extends AppCompatActivity implements Seria
 
                 getSupportActionBar().setTitle(refreshedCategory.getDescription());
                 category.setDescription(refreshedCategory.getDescription());
+                description.setText(refreshedCategory.getDescription());
+                description.setTextColor(Color.parseColor(refreshedCategory.getColor()));
             }
 
             @Override
